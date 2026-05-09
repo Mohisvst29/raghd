@@ -216,18 +216,41 @@ export default function AdminSettings() {
         <div className="space-y-6">
           <div className="bg-surface border border-outline-variant rounded-xl p-6 shadow-sm">
             <h2 className="text-title-lg text-primary font-bold mb-4 border-b border-outline-variant pb-2">حساب المدير</h2>
-            <div className="flex flex-col items-center mb-6">
-              <div className="size-20 rounded-full bg-cover bg-center border-4 border-surface-container-high shadow-sm mb-3" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida/ADBb0ugQAN_RV5Z0Qj6QbnjgXQTOhDqInmfzS9gX6lYPwDXRnzmsITfO50plYVFKPzUjz_KfMkEyX2fU4I43_qarhh0ytjBbdrVCY-b9KJXWIXmGsnFiZaltGXaCke52D58wu77A2KO4HCuCOvfpSo2xRXDUWU5U_v2h_b_rE0GRLu0NKhE85jWe3GSrztPXtTMGoXx3_DbepWo04cwX3OlCOUTXK39zzGjVFKx5xpkrKvrB3A1s1PCbwWt-zp18JbX2U5mKWT7sp0Ut_sE')" }}></div>
-              <h3 className="font-bold text-on-surface text-lg">أحمد العامري</h3>
-              <p className="text-sm text-outline">مدير النظام</p>
-            </div>
-            <div className="space-y-3">
-              <button className="w-full text-center bg-surface-container-low border border-outline-variant text-on-surface py-2 rounded-lg font-bold hover:bg-surface-container-high transition-colors">
-                تغيير كلمة المرور
-              </button>
-              <button className="w-full text-center bg-error/10 text-error border border-error/20 py-2 rounded-lg font-bold hover:bg-error hover:text-white transition-colors">
-                تسجيل الخروج
-              </button>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-bold text-on-surface mb-1">اسم المستخدم</label>
+                <input 
+                  type="text" 
+                  value={settings.adminUsername || "admin"} 
+                  onChange={(e) => handleSettingsChange("adminUsername", e.target.value)} 
+                  className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary outline-none text-on-surface" 
+                  dir="ltr" 
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-bold text-on-surface mb-1">كلمة المرور</label>
+                <input 
+                  type="text" 
+                  value={settings.adminPassword || "admin21@#"} 
+                  onChange={(e) => handleSettingsChange("adminPassword", e.target.value)} 
+                  className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary outline-none text-on-surface" 
+                  dir="ltr" 
+                />
+              </div>
+              
+              <div className="pt-2">
+                <button onClick={handleSaveSettings} disabled={isSaving} className="w-full text-center bg-primary text-white py-2 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">
+                  حفظ بيانات الدخول
+                </button>
+              </div>
+
+              <div className="pt-4 border-t border-outline-variant mt-4">
+                <button onClick={() => window.location.href = '/admin/login'} className="w-full text-center bg-error/10 text-error border border-error/20 py-2 rounded-lg font-bold hover:bg-error hover:text-white transition-colors">
+                  تسجيل الخروج
+                </button>
+              </div>
             </div>
           </div>
         </div>

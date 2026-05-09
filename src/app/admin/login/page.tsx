@@ -10,13 +10,22 @@ export default function AdminLogin() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Temporary mock login logic
-    if (email === "admin" && password === "admin21@#") {
-      router.push("/admin");
-    } else {
-      setError("اسم المستخدم أو كلمة المرور غير صحيحة");
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: email, password }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        router.push("/admin");
+      } else {
+        setError("اسم المستخدم أو كلمة المرور غير صحيحة");
+      }
+    } catch (err) {
+      setError("حدث خطأ في الاتصال بالسيرفر");
     }
   };
 

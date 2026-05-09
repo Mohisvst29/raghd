@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import HeroSlider from "@/components/HeroSlider";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useState } from "react";
 
 interface HomeContentProps {
   siteContent: any;
@@ -12,6 +13,33 @@ interface HomeContentProps {
 
 export default function HomeContent({ siteContent }: HomeContentProps) {
   const { t, lang } = useLanguage();
+
+  const [formData, setFormData] = useState({ name: "", phone: "", service: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.phone || !formData.message) {
+      alert(lang === 'ar' ? "يرجى تعبئة جميع الحقول المطلوبة" : "Please fill all required fields");
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (res.ok) {
+        alert(lang === 'ar' ? "تم إرسال رسالتك بنجاح!" : "Your message has been sent successfully!");
+        setFormData({ name: "", phone: "", service: "", message: "" });
+      }
+    } catch (err) {
+      alert(lang === 'ar' ? "حدث خطأ أثناء الإرسال" : "Failed to send message");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const currentContent = lang === 'ar' ? siteContent : (siteContent?.en || siteContent);
   
@@ -289,40 +317,42 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
             </div>
             
             <div className="p-stack-lg bg-white">
-              <form className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-label-sm text-primary mb-1">{t.home.contact.formName}</label>
-                  <input className="w-full border-outline-variant rounded-lg focus:ring-primary focus:border-primary p-3 bg-surface" placeholder={t.home.contact.formNamePlaceholder} type="text" />
+                  <input value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full border-outline-variant rounded-lg focus:ring-primary focus:border-primary p-3 bg-surface" placeholder={t.home.contact.formNamePlaceholder} type="text" />
                 </div>
                 <div>
                   <label className="block text-label-sm text-primary mb-1">{t.home.contact.formPhone}</label>
-                  <input className="w-full border-outline-variant rounded-lg focus:ring-primary focus:border-primary p-3 bg-surface" placeholder={t.home.contact.formPhonePlaceholder} type="tel" />
+                  <input value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full border-outline-variant rounded-lg focus:ring-primary focus:border-primary p-3 bg-surface" placeholder={t.home.contact.formPhonePlaceholder} type="tel" />
                 </div>
                 <div>
                   <label className="block text-label-sm text-primary mb-1">{contact.serviceLabel || t.home.contact.formService}</label>
-                  <select className="w-full border-outline-variant rounded-lg focus:ring-primary focus:border-primary p-3 bg-surface">
+                  <select value={formData.service} onChange={e => setFormData({...formData, service: e.target.value})} className="w-full border-outline-variant rounded-lg focus:ring-primary focus:border-primary p-3 bg-surface">
+                    <option value="">{t.home.contact.formService}</option>
                     {contact.serviceOptions ? (
                       contact.serviceOptions.split(",").map((opt: string, i: number) => (
-                        <option key={i}>{opt.trim()}</option>
+                        <option key={i} value={opt.trim()}>{opt.trim()}</option>
                       ))
                     ) : (
                       t.home.contact.formServiceOptions.map((opt, i) => (
-                        <option key={i}>{opt}</option>
+                        <option key={i} value={opt}>{opt}</option>
                       ))
                     )}
                   </select>
                 </div>
                 <div>
                   <label className="block text-label-sm text-primary mb-1">{t.home.contact.formMessage}</label>
-                  <textarea className="w-full border-outline-variant rounded-lg focus:ring-primary focus:border-primary p-3 bg-surface" placeholder={t.home.contact.formMessagePlaceholder} rows={4}></textarea>
+                  <textarea value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} className="w-full border-outline-variant rounded-lg focus:ring-primary focus:border-primary p-3 bg-surface" placeholder={t.home.contact.formMessagePlaceholder} rows={4}></textarea>
                 </div>
                 <motion.button 
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  type="button"
-                  className="w-full bg-primary text-white py-4 rounded-lg font-bold hover:bg-primary-container transition-all shadow-md"
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-primary text-white py-4 rounded-lg font-bold hover:bg-primary-container transition-all shadow-md disabled:opacity-50"
                 >
-                  {contact.submitBtn || contact.submit}
+                  {isSubmitting ? "جاري الإرسال..." : (contact.submitBtn || contact.submit)}
                 </motion.button>
               </form>
             </div>

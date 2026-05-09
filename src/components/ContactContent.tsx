@@ -4,9 +4,38 @@ import TopNavBar from "@/components/TopNavBar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useState } from "react";
 
 export default function ContactContent({ siteContent }: { siteContent: any }) {
   const { t, lang } = useLanguage();
+  
+  const [formData, setFormData] = useState({ name: "", phone: "", service: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.phone || !formData.message) {
+      alert(lang === 'ar' ? "يرجى تعبئة جميع الحقول المطلوبة" : "Please fill all required fields");
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (res.ok) {
+        alert(lang === 'ar' ? "تم إرسال رسالتك بنجاح!" : "Your message has been sent successfully!");
+        setFormData({ name: "", phone: "", service: "", message: "" });
+      }
+    } catch (err) {
+      alert(lang === 'ar' ? "حدث خطأ أثناء الإرسال" : "Failed to send message");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const baseP = t.contactPage;
   const currentContent = lang === 'ar' ? siteContent : (siteContent?.en || siteContent);
   const contact = currentContent?.contact ? { ...currentContent.contact, heroImage: siteContent?.contact?.heroImage } : { ...t.home.contact, heroImage: siteContent?.contact?.heroImage };
@@ -108,12 +137,14 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                 <h2 className="text-2xl font-bold text-primary mb-1">{p.formTitle}</h2>
                 <div className="w-12 h-1 bg-tertiary-container rounded-full mb-6"></div>
 
-                <form className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-bold text-primary mb-1">{t.home.contact.formName}</label>
                       <input
                         type="text"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder={t.home.contact.formNamePlaceholder}
                         className="w-full border border-outline-variant rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-primary bg-surface"
                       />
@@ -122,6 +153,8 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                       <label className="block text-xs font-bold text-primary mb-1">{t.home.contact.formPhone}</label>
                       <input
                         type="tel"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         placeholder={t.home.contact.formPhonePlaceholder}
                         className="w-full border border-outline-variant rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-primary bg-surface"
                         dir="ltr"
@@ -131,9 +164,14 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
 
                   <div>
                     <label className="block text-xs font-bold text-primary mb-1">{contact?.serviceLabel || t.home.contact.formService}</label>
-                    <select className="w-full border border-outline-variant rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-primary bg-surface text-right">
+                    <select 
+                      value={formData.service}
+                      onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                      className="w-full border border-outline-variant rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-primary bg-surface text-right"
+                    >
+                      <option value="">{t.home.contact.formService}</option>
                       {p.formServiceOptions.map((opt: string, i: number) => (
-                        <option key={i}>{opt}</option>
+                        <option key={i} value={opt}>{opt}</option>
                       ))}
                     </select>
                   </div>
@@ -142,6 +180,8 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                     <label className="block text-xs font-bold text-primary mb-1">{t.home.contact.formMessage}</label>
                     <textarea
                       rows={4}
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder={lang === 'ar' ? "اكتب تفاصيل طلبك هنا..." : "Write your request details here..."}
                       className="w-full border border-outline-variant rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-primary bg-surface resize-none"
                     />
@@ -150,9 +190,11 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full bg-primary text-white py-4 rounded-lg font-bold text-lg hover:shadow-lg transition-all"
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-primary text-white py-4 rounded-lg font-bold text-lg hover:shadow-lg transition-all disabled:opacity-50"
                   >
-                    {contact?.submitBtn || (lang === 'ar' ? "إرسال الرسالة" : "Send Message")}
+                    {isSubmitting ? "جاري الإرسال..." : (contact?.submitBtn || (lang === 'ar' ? "إرسال الرسالة" : "Send Message"))}
                   </motion.button>
                 </form>
               </div>

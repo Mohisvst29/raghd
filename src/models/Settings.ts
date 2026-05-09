@@ -7,6 +7,8 @@ const SettingsSchema = new mongoose.Schema({
   phoneNumbers: { type: String, default: "0506468204, 0568094648" }, // Comma separated for multiple
   email: { type: String, default: "ceo@raghadports.com" },
   whatsapp: { type: String, default: "966506468204" },
+  adminUsername: { type: String, default: "admin" },
+  adminPassword: { type: String, default: "admin21@#" },
 }, { timestamps: true });
 
 export const Settings = mongoose.models.Settings || mongoose.model("Settings", SettingsSchema);
