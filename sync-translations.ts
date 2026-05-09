@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import { translateObject } from './src/lib/translate.ts';
-import { Content } from './src/models/Content.ts';
-import { Post } from './src/models/Post.ts';
+import { translateObject } from './src/lib/translate';
+import { Content } from './src/models/Content';
+import { Post } from './src/models/Post';
 
 require('dotenv').config({ path: '.env.local' });
 
