@@ -75,10 +75,16 @@ export async function GET() {
   }
 }
 
+import { translateObject } from "@/lib/translate";
+
 export async function POST(req: Request) {
   try {
     await connectDB();
     const body = await req.json();
+    
+    // Auto-translate to English
+    const enTranslations = await translateObject(body);
+    body.en = enTranslations;
     
     const content = await Content.findOneAndUpdate({}, body, { new: true, upsert: true, strict: false });
     

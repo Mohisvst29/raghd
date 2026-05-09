@@ -34,7 +34,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <path clipRule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor" fillRule="evenodd"></path>
               </svg>
             </div>
-            <span className="text-headline-md text-primary font-bold">{t.admin.sidebar.brand}</span>
+            <span className="text-headline-md text-primary font-bold">رغد للموانيئ</span>
           </div>
           <button className="lg:hidden text-outline" onClick={() => setIsSidebarOpen(false)}>
             <span className="material-symbols-outlined">close</span>
@@ -44,30 +44,30 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <nav className="flex-1 overflow-y-auto p-4 space-y-2">
           <Link href="/admin" className={`flex items-center gap-3 px-3 py-3 rounded-lg font-semibold ${pathname === '/admin' ? 'bg-secondary-container text-on-secondary-container' : 'hover:bg-surface-container-high text-on-surface-variant'}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>dashboard</span>
-            <span>{t.admin.sidebar.dashboard}</span>
+            <span>لوحة القيادة</span>
           </Link>
           
-          <div className="pt-4 pb-2 px-3 text-label-sm text-outline uppercase tracking-wider">{t.admin.sidebar.content}</div>
+          <div className="pt-4 pb-2 px-3 text-label-sm text-outline uppercase tracking-wider">المحتوى</div>
           <Link href="/admin/content" className={`flex items-center gap-3 px-3 py-2 rounded transition-colors ${pathname === '/admin/content' ? 'bg-secondary-container text-on-secondary-container font-semibold' : 'hover:bg-surface-container-high text-on-surface-variant'}`}>
             <span className="material-symbols-outlined">edit_document</span>
             <span>تعديل محتوى الموقع</span>
           </Link>
           <Link href="/admin/blog" className={`flex items-center gap-3 px-3 py-2 rounded transition-colors ${pathname === '/admin/blog' ? 'bg-secondary-container text-on-secondary-container font-semibold' : 'hover:bg-surface-container-high text-on-surface-variant'}`}>
             <span className="material-symbols-outlined">article</span>
-            <span>{t.admin.sidebar.blog}</span>
+            <span>المدونة</span>
           </Link>
           
-          <div className="pt-4 pb-2 px-3 text-label-sm text-outline uppercase tracking-wider">{t.admin.sidebar.operations}</div>
+          <div className="pt-4 pb-2 px-3 text-label-sm text-outline uppercase tracking-wider">العمليات</div>
           <Link href="/admin/inquiries" className={`flex items-center gap-3 px-3 py-2 rounded transition-colors ${pathname === '/admin/inquiries' ? 'bg-secondary-container text-on-secondary-container font-semibold' : 'hover:bg-surface-container-high text-on-surface-variant'}`}>
             <span className="material-symbols-outlined">mail</span>
-            <span>{t.admin.sidebar.inquiries}</span>
+            <span>الاستفسارات</span>
             <span className="mr-auto bg-error text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">12</span>
           </Link>
           
           <div className="pt-8 mt-auto border-t border-outline-variant">
             <Link href="/admin/settings" className={`flex items-center gap-3 px-3 py-2 rounded transition-colors ${pathname === '/admin/settings' ? 'bg-secondary-container text-on-secondary-container font-semibold' : 'hover:bg-surface-container-high text-on-surface-variant'}`}>
               <span className="material-symbols-outlined">settings</span>
-              <span>{t.admin.sidebar.settings}</span>
+              <span>الإعدادات</span>
             </Link>
           </div>
         </nav>
@@ -83,7 +83,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </button>
             <div className="relative w-full max-w-md hidden sm:block">
               <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline">search</span>
-              <input className="w-full bg-surface-container-low border border-outline-variant rounded-lg pr-10 pl-4 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none" placeholder={t.admin.topbar.search} type="text"/>
+              <input className="w-full bg-surface-container-low border border-outline-variant rounded-lg pr-10 pl-4 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none" placeholder="البحث..." type="text"/>
             </div>
           </div>
           
@@ -94,8 +94,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </button>
             <div className="flex items-center gap-3 pr-6 border-r border-outline-variant">
               <div className="text-left">
-                <p className="text-sm font-bold text-on-surface">{t.admin.topbar.adminName}</p>
-                <p className="text-xs text-outline">{t.admin.topbar.role}</p>
+                <p className="text-sm font-bold text-on-surface">المدير العام</p>
+                <p className="text-xs text-outline">مدير النظام</p>
               </div>
               <div className="size-10 rounded-full bg-cover bg-center border border-outline-variant" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida/ADBb0ugQAN_RV5Z0Qj6QbnjgXQTOhDqInmfzS9gX6lYPwDXRnzmsITfO50plYVFKPzUjz_KfMkEyX2fU4I43_qarhh0ytjBbdrVCY-b9KJXWIXmGsnFiZaltGXaCke52D58wu77A2KO4HCuCOvfpSo2xRXDUWU5U_v2h_b_rE0GRLu0NKhE85jWe3GSrztPXtTMGoXx3_DbepWo04cwX3OlCOUTXK39zzGjVFKx5xpkrKvrB3A1s1PCbwWt-zp18JbX2U5mKWT7sp0Ut_sE')" }}></div>
             </div>

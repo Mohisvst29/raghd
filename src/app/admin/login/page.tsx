@@ -13,10 +13,10 @@ export default function AdminLogin() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     // Temporary mock login logic
-    if (email === "admin@raghadports.com" && password === "admin123") {
+    if (email === "admin" && password === "admin21@#") {
       router.push("/admin");
     } else {
-      setError("البريد الإلكتروني أو كلمة المرور غير صحيحة");
+      setError("اسم المستخدم أو كلمة المرور غير صحيحة");
     }
   };
 
@@ -50,15 +50,15 @@ export default function AdminLogin() {
 
         <form onSubmit={handleLogin} className="space-y-5">
           <div>
-            <label className="block text-label-sm font-bold text-on-surface mb-1">البريد الإلكتروني</label>
+            <label className="block text-label-sm font-bold text-on-surface mb-1">اسم المستخدم</label>
             <div className="relative">
-              <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline">mail</span>
+              <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline">person</span>
               <input 
-                type="email" 
+                type="text" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full bg-surface-container-low border border-outline-variant rounded-lg pr-10 pl-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm"
-                placeholder="admin@raghadports.com"
+                placeholder="admin"
                 required
               />
             </div>
@@ -93,11 +93,6 @@ export default function AdminLogin() {
             </motion.button>
           </div>
         </form>
-        
-        <div className="mt-8 text-center text-xs text-outline">
-          <p>للاختبار استخدم:</p>
-          <p className="mt-1" dir="ltr">admin@raghadports.com / admin123</p>
-        </div>
       </motion.div>
     </div>
   );

@@ -13,19 +13,21 @@ interface HomeContentProps {
 export default function HomeContent({ siteContent }: HomeContentProps) {
   const { t, lang } = useLanguage();
 
-  const heroSlides = siteContent?.hero?.slides?.length > 0 
-    ? siteContent.hero.slides.map((slide: any, idx: number) => ({
+  const currentContent = lang === 'ar' ? siteContent : (siteContent?.en || siteContent);
+  
+  const heroSlides = currentContent?.hero?.slides?.length > 0 
+    ? currentContent.hero.slides.map((slide: any, idx: number) => ({
         ...slide,
-        title: lang === 'ar' ? slide.title : (t.home.heroSlides[idx]?.title || slide.title),
-        description: lang === 'ar' ? slide.description : (t.home.heroSlides[idx]?.desc || slide.description),
-        buttonText: lang === 'ar' ? slide.buttonText : (t.home.heroSlides[idx]?.cta || slide.buttonText),
+        title: slide.title || t.home.heroSlides[idx]?.title,
+        description: slide.description || t.home.heroSlides[idx]?.desc,
+        buttonText: slide.buttonText || t.home.heroSlides[idx]?.cta,
       }))
     : t.home.heroSlides;
 
-  const about = lang === 'ar' && siteContent?.about ? siteContent.about : t.home.about;
-  const services = lang === 'ar' && siteContent?.services ? siteContent.services : t.home.services;
-  const whyUs = lang === 'ar' && siteContent?.whyUs ? siteContent.whyUs : t.home.whyUs;
-  const contact = lang === 'ar' && siteContent?.contact ? siteContent.contact : t.home.contact;
+  const about = currentContent?.about || t.home.about;
+  const services = currentContent?.services || t.home.services;
+  const whyUs = currentContent?.whyUs || t.home.whyUs;
+  const contact = currentContent?.contact || t.home.contact;
   const accreditedEntities = siteContent?.accreditedEntities || null;
 
   return (

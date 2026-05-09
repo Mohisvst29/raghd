@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongoose";
 import { Post } from "@/models/Post";
 
+import { translateObject } from "@/lib/translate";
+
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     await connectDB();
@@ -11,6 +13,10 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     if (body.slug === "") {
       body.slug = body.title ? body.title.trim().replace(/\s+/g, '-').toLowerCase() + '-' + Date.now() : 'post-' + Date.now();
     }
+    
+    // Auto-translate to English
+    const enTranslations = await translateObject(body);
+    body.en = enTranslations;
     
     const { id } = await params;
     const updatedPost = await Post.findByIdAndUpdate(id, body, { new: true });

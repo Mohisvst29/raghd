@@ -7,9 +7,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function AboutContent({ siteContent }: { siteContent: any }) {
   const { t, lang } = useLanguage();
-  const about = lang === 'ar' && siteContent?.about 
-    ? siteContent.about 
-    : { ...t.home.about, heroImage: siteContent?.about?.heroImage };
+  const currentContent = lang === 'ar' ? siteContent : (siteContent?.en || siteContent);
+  const about = currentContent?.about ? { ...currentContent.about, heroImage: siteContent?.about?.heroImage } : { ...t.home.about, heroImage: siteContent?.about?.heroImage };
 
   return (
     <>

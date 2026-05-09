@@ -12,6 +12,8 @@ export async function GET() {
   }
 }
 
+import { translateObject } from "@/lib/translate";
+
 export async function POST(req: Request) {
   try {
     await connectDB();
@@ -21,6 +23,10 @@ export async function POST(req: Request) {
     if (!body.slug) {
       body.slug = body.title ? body.title.trim().replace(/\s+/g, '-').toLowerCase() + '-' + Date.now() : 'post-' + Date.now();
     }
+    
+    // Auto-translate to English
+    const enTranslations = await translateObject(body);
+    body.en = enTranslations;
     
     const newPost = await Post.create(body);
     return NextResponse.json({ success: true, data: newPost });

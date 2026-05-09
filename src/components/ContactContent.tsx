@@ -8,10 +8,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 export default function ContactContent({ siteContent }: { siteContent: any }) {
   const { t, lang } = useLanguage();
   const baseP = t.contactPage;
-  const contact = lang === 'ar' && siteContent?.contact 
-    ? siteContent.contact 
-    : { ...t.home.contact, heroImage: siteContent?.contact?.heroImage };
-  
+  const currentContent = lang === 'ar' ? siteContent : (siteContent?.en || siteContent);
+  const contact = currentContent?.contact ? { ...currentContent.contact, heroImage: siteContent?.contact?.heroImage } : { ...t.home.contact, heroImage: siteContent?.contact?.heroImage };
   const p = {
     ...baseP,
     formTitle: contact?.title || baseP.formTitle,

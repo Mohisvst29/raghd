@@ -7,7 +7,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import Link from "next/link";
 
 export default function ServicesContent({ siteContent }: { siteContent: any }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const currentContent = lang === 'ar' ? siteContent : (siteContent?.en || siteContent);
   const p = t.servicesPage;
 
   return (
@@ -17,7 +18,7 @@ export default function ServicesContent({ siteContent }: { siteContent: any }) {
         {/* Hero Section */}
         <section className="relative h-64 md:h-80 flex items-center justify-center overflow-hidden">
           <img
-            src={siteContent?.services?.heroImage || "https://images.unsplash.com/photo-1578575437130-527eed3abbec?q=80&w=2070&auto=format&fit=crop"}
+            src={currentContent?.services?.heroImage || "https://images.unsplash.com/photo-1578575437130-527eed3abbec?q=80&w=2070&auto=format&fit=crop"}
             alt="Services Hero"
             className="absolute inset-0 w-full h-full object-cover"
           />
@@ -32,14 +33,14 @@ export default function ServicesContent({ siteContent }: { siteContent: any }) {
         <section className="py-20 bg-surface-container-low" id="services">
           <div className="max-w-[1280px] mx-auto px-margin">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">{siteContent?.services?.title || p.heroTitle}</h2>
-              <p className="text-lg text-on-surface-variant max-w-2xl mx-auto">{siteContent?.services?.subtitle || p.heroDesc}</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">{currentContent?.services?.title || p.heroTitle}</h2>
+              <p className="text-lg text-on-surface-variant max-w-2xl mx-auto">{currentContent?.services?.subtitle || p.heroDesc}</p>
               <div className="w-20 h-1 bg-tertiary-container mx-auto mt-6 rounded-full"></div>
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {siteContent?.services?.items && siteContent.services.items.length > 0 ? (
-                siteContent.services.items
+              {currentContent?.services?.items && currentContent.services.items.length > 0 ? (
+                currentContent.services.items
                   .filter((s: any) => s.status !== false)
                   .sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
                   .map((service: any, idx: number) => (

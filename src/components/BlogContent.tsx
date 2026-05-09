@@ -7,9 +7,15 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function BlogContent({ siteContent, posts = [] }: { siteContent: any, posts?: any[] }) {
   const { t, lang } = useLanguage();
-  const dbBlog = lang === 'ar' && siteContent?.blog 
-    ? siteContent.blog 
-    : { ...t.blogPage, heroImage: siteContent?.blog?.heroImage };
+  const currentContent = lang === 'ar' ? siteContent : (siteContent?.en || siteContent);
+  const dbBlog = currentContent?.blog ? { ...currentContent.blog, heroImage: siteContent?.blog?.heroImage } : { ...t.blogPage, heroImage: siteContent?.blog?.heroImage };
+
+  const translatedPosts = posts.map(post => {
+    if (lang === 'en' && post.en) {
+      return { ...post, title: post.en.title || post.title, excerpt: post.en.excerpt || post.excerpt, category: post.en.category || post.category };
+    }
+    return post;
+  });
 
   return (
     <>
@@ -30,7 +36,7 @@ export default function BlogContent({ siteContent, posts = [] }: { siteContent: 
 
       <main className="max-w-container-max mx-auto px-gutter py-stack-lg">
         {/* Featured Post Section */}
-        {posts.length > 0 && (
+        {translatedPosts.length > 0 && (
         <section className="mb-stack-lg">
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
@@ -39,18 +45,18 @@ export default function BlogContent({ siteContent, posts = [] }: { siteContent: 
             className="grid grid-cols-1 lg:grid-cols-12 bg-white rounded-xl overflow-hidden border border-outline-variant shadow-sm"
           >
             <div className="lg:col-span-7 relative h-64 lg:h-full min-h-[400px]">
-              <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${posts[0].image || "https://images.unsplash.com/photo-1524522173746-f628baad3644?auto=format&fit=crop&q=80&w=2000"}')` }}></div>
+              <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${translatedPosts[0].image || "https://images.unsplash.com/photo-1524522173746-f628baad3644?auto=format&fit=crop&q=80&w=2000"}')` }}></div>
             </div>
             <div className="lg:col-span-5 p-margin flex flex-col justify-center bg-surface-container-low">
-              <span className="inline-block px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed rounded-full font-label-sm text-label-sm mb-4 w-fit">{posts[0].category || t.blogPage.featuredBadge}</span>
-              <h2 className="font-headline-lg text-headline-lg text-primary mb-4 leading-tight">{posts[0].title}</h2>
-              <p className="font-body-md text-body-md text-on-surface-variant mb-6">{posts[0].excerpt}</p>
+              <span className="inline-block px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed rounded-full font-label-sm text-label-sm mb-4 w-fit">{translatedPosts[0].category || t.blogPage.featuredBadge}</span>
+              <h2 className="font-headline-lg text-headline-lg text-primary mb-4 leading-tight">{translatedPosts[0].title}</h2>
+              <p className="font-body-md text-body-md text-on-surface-variant mb-6">{translatedPosts[0].excerpt}</p>
               <div className="flex items-center justify-between mt-auto">
                 <span className="font-label-sm text-label-sm text-outline flex items-center gap-2">
                   <span className="material-symbols-outlined text-[18px]">calendar_today</span>
-                  {new Date(posts[0].createdAt).toLocaleDateString("ar-SA")}
+                  {new Date(translatedPosts[0].createdAt).toLocaleDateString(lang === 'en' ? "en-US" : "ar-SA")}
                 </span>
-                <a className="text-primary font-bold hover:underline flex items-center gap-1" href={`/blog/${posts[0].slug}`}>
+                <a className="text-primary font-bold hover:underline flex items-center gap-1" href={`/blog/${translatedPosts[0].slug}`}>
                   {t.blogPage.readMore}
                   <span className="material-symbols-outlined">arrow_back</span>
                 </a>
@@ -74,7 +80,7 @@ export default function BlogContent({ siteContent, posts = [] }: { siteContent: 
 
         {/* Blog Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
-          {posts.slice(1).map((post, idx) => (
+          {translatedPosts.slice(1).map((post, idx) => (
             <motion.article 
               key={idx}
               initial={{ opacity: 0, y: 20 }}
@@ -91,7 +97,7 @@ export default function BlogContent({ siteContent, posts = [] }: { siteContent: 
               <div className="p-stack-sm flex flex-col flex-grow">
                 <div className="flex items-center gap-2 text-outline mb-2 font-code-xs">
                   <span className="material-symbols-outlined text-[16px]">schedule</span>
-                  {new Date(post.createdAt).toLocaleDateString("ar-SA")}
+                  {new Date(post.createdAt).toLocaleDateString(lang === 'en' ? "en-US" : "ar-SA")}
                 </div>
                 <h3 className="font-headline-md text-headline-md text-primary mb-3 leading-snug">{post.title}</h3>
                 <p className="font-body-md text-body-md text-on-surface-variant line-clamp-3 mb-6">{post.excerpt}</p>
