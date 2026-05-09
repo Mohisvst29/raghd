@@ -4,6 +4,7 @@ const SettingsSchema = new mongoose.Schema({
   siteNameAr: { type: String, default: "مؤسسة موانئ رغد للتخليص الجمركي" },
   siteNameEn: { type: String, default: "Raghad Ports Customs Clearance" },
   seoDescription: { type: String, default: "خبراء التخليص الجمركي في ميناء جدة الإسلامي. نسخر خبراتنا لتيسير تجارتكم وضمان وصول بضائعكم بكفاءة تامة." },
+  seoDescriptionEn: { type: String, default: "Customs clearance experts at Jeddah Islamic Port. We use our expertise to facilitate your trade and ensure your goods arrive efficiently." },
   phoneNumbers: { type: String, default: "0506468204, 0568094648" }, // Comma separated for multiple
   email: { type: String, default: "ceo@raghadports.com" },
   whatsapp: { type: String, default: "966506468204" },

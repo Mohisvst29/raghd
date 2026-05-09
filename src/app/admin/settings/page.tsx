@@ -78,9 +78,13 @@ export default function AdminSettings() {
                 <label className="block text-sm font-bold text-on-surface mb-1">اسم المؤسسة (إنجليزي)</label>
                 <input type="text" value={settings.siteNameEn} onChange={(e) => handleSettingsChange("siteNameEn", e.target.value)} className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary outline-none text-on-surface" dir="ltr" />
               </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-bold text-on-surface mb-1">وصف الموقع (SEO)</label>
+              <div className="md:col-span-1">
+                <label className="block text-sm font-bold text-on-surface mb-1">وصف الموقع (SEO) - عربي</label>
                 <textarea value={settings.seoDescription} onChange={(e) => handleSettingsChange("seoDescription", e.target.value)} className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary outline-none text-on-surface min-h-[80px]"></textarea>
+              </div>
+              <div className="md:col-span-1">
+                <label className="block text-sm font-bold text-on-surface mb-1">وصف الموقع (SEO) - إنجليزي</label>
+                <textarea value={settings.seoDescriptionEn} onChange={(e) => handleSettingsChange("seoDescriptionEn", e.target.value)} className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary outline-none text-on-surface min-h-[80px]" dir="ltr"></textarea>
               </div>
             </div>
             <div className="mt-4 flex justify-end">
@@ -150,6 +154,9 @@ export default function AdminSettings() {
                 className="object-contain transition-all"
               />
             </div>
+            <div className="mt-4 flex justify-end">
+              <button onClick={handleSaveSettings} disabled={isSaving} className="bg-primary text-white px-6 py-2 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">حفظ الإعدادات</button>
+            </div>
           </div>
 
           <div className="bg-surface border border-outline-variant rounded-xl p-6 shadow-sm">
@@ -213,8 +220,9 @@ export default function AdminSettings() {
               </div>
             </div>
             
-            <div className="mt-6 flex justify-end">
+            <div className="mt-6 flex justify-between items-center">
               <button onClick={resetColors} className="bg-surface-container-low text-error px-6 py-2 rounded-lg font-bold hover:bg-error/10 border border-error/20 transition-colors">استعادة الألوان الافتراضية</button>
+              <button onClick={handleSaveSettings} disabled={isSaving} className="bg-primary text-white px-6 py-2 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50">حفظ الإعدادات</button>
             </div>
           </div>
         </div>

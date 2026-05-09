@@ -9,6 +9,7 @@ export default function AdminContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [content, setContent] = useState<any>(null);
+  const [editLang, setEditLang] = useState<"ar" | "en">("ar");
 
   // Fetch initial content
   useEffect(() => {
@@ -54,6 +55,20 @@ export default function AdminContent() {
     }
   };
 
+
+
+  const handleNestedChangeEn = (section, field, value) => {
+    setContent((prev) => ({
+      ...prev,
+      en: {
+        ...(prev.en || {}),
+        [section]: {
+          ...(prev.en?.[section] || {}),
+          [field]: value
+        }
+      }
+    }));
+  };
   const handleNestedChange = (section: string, field: string, value: any) => {
     setContent((prev: any) => ({
       ...prev,
@@ -139,7 +154,7 @@ export default function AdminContent() {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-bold text-on-surface mb-1">العنوان الرئيسي</label>
+                        <label className="block text-sm font-bold text-on-surface mb-1">العنوان الرئيسي (عربي)</label>
                         <input 
                           type="text" 
                           value={slide.title}
@@ -219,12 +234,16 @@ export default function AdminContent() {
               )}
             </div>
             <div>
-              <label className="block text-sm font-bold text-on-surface mb-1">العنوان</label>
+              <label className="block text-sm font-bold text-on-surface mb-1">العنوان (عربي)</label>
               <input type="text" value={content.about.title} onChange={(e) => handleNestedChange("about", "title", e.target.value)} className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 focus:ring-1 focus:ring-primary outline-none" />
+              <label className="block text-sm font-bold text-on-surface mb-1 mt-3">العنوان (إنجليزي)</label>
+              <input type="text" value={content.en?.about?.title || ""} onChange={(e) => handleNestedChangeEn("about", "title", e.target.value)} className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 focus:ring-1 focus:ring-primary outline-none" dir="ltr" />
             </div>
             <div>
-              <label className="block text-sm font-bold text-on-surface mb-1">الوصف التفصيلي</label>
+              <label className="block text-sm font-bold text-on-surface mb-1">الوصف التفصيلي (عربي)</label>
               <textarea value={content.about.description} onChange={(e) => handleNestedChange("about", "description", e.target.value)} className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 focus:ring-1 focus:ring-primary outline-none h-32" />
+              <label className="block text-sm font-bold text-on-surface mb-1 mt-3">الوصف التفصيلي (إنجليزي)</label>
+              <textarea value={content.en?.about?.description || ""} onChange={(e) => handleNestedChangeEn("about", "description", e.target.value)} className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 focus:ring-1 focus:ring-primary outline-none h-32" dir="ltr" />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant">
@@ -271,6 +290,8 @@ export default function AdminContent() {
               <div>
                 <label className="block text-sm font-bold text-on-surface mb-1">العنوان الرئيسي</label>
                 <input type="text" value={content.services.title} onChange={(e) => handleNestedChange("services", "title", e.target.value)} className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 focus:ring-1 focus:ring-primary outline-none" />
+                <label className="block text-sm font-bold text-on-surface mb-1 mt-3">العنوان الرئيسي (إنجليزي)</label>
+                <input type="text" value={content.en?.services?.title || ""} onChange={(e) => handleNestedChangeEn("services", "title", e.target.value)} className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 focus:ring-1 focus:ring-primary outline-none" dir="ltr" />
               </div>
               <div>
                 <label className="block text-sm font-bold text-on-surface mb-1">العنوان الفرعي (Subtitle)</label>
