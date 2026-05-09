@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongoose";
 import { Post } from "@/models/Post";
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     await connectDB();
     const body = await req.json();
@@ -12,7 +12,8 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       body.slug = body.title ? body.title.trim().replace(/\s+/g, '-').toLowerCase() + '-' + Date.now() : 'post-' + Date.now();
     }
     
-    const updatedPost = await Post.findByIdAndUpdate(params.id, body, { new: true });
+    const { id } = await params;
+    const updatedPost = await Post.findByIdAndUpdate(id, body, { new: true });
     return NextResponse.json({ success: true, data: updatedPost });
   } catch (error: any) {
     console.error("Failed to update post:", error);
@@ -20,10 +21,11 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     await connectDB();
-    await Post.findByIdAndDelete(params.id);
+    const { id } = await params;
+    await Post.findByIdAndDelete(id);
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Failed to delete post" }, { status: 500 });

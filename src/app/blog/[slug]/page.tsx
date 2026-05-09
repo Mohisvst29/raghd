@@ -4,9 +4,10 @@ import TopNavBar from "@/components/TopNavBar";
 import Footer from "@/components/Footer";
 import { notFound } from "next/navigation";
 
-export default async function BlogPost({ params }: { params: { slug: string } }) {
+export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
   await connectDB();
-  const dbPost = await Post.findOne({ slug: params.slug });
+  const { slug } = await params;
+  const dbPost = await Post.findOne({ slug });
   
   if (!dbPost) {
     notFound();

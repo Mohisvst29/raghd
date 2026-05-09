@@ -127,7 +127,7 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-primary mb-1">{dbContact?.serviceLabel || t.home.contact.formService}</label>
+                    <label className="block text-xs font-bold text-primary mb-1">{contact?.serviceLabel || t.home.contact.formService}</label>
                     <select className="w-full border border-outline-variant rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-primary bg-surface text-right">
                       {p.formServiceOptions.map((opt: string, i: number) => (
                         <option key={i}>{opt}</option>
@@ -147,10 +147,9 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    type="button"
-                    className="w-full bg-primary text-white py-4 rounded-lg font-bold text-sm hover:bg-primary-container transition-colors shadow-md"
+                    className="w-full bg-primary text-white py-4 rounded-lg font-bold text-lg hover:shadow-lg transition-all"
                   >
-                    {dbContact?.submitBtn || (lang === 'ar' ? "إرسال الرسالة" : "Send Message")}
+                    {contact?.submitBtn || (lang === 'ar' ? "إرسال الرسالة" : "Send Message")}
                   </motion.button>
                 </form>
               </div>
