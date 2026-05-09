@@ -30,10 +30,16 @@ export default function AdminSettings() {
   const handleSaveSettings = async () => {
     setIsSaving(true);
     try {
+      const payload = {
+        ...settings,
+        logoUrl,
+        logoSize,
+        colors
+      };
       const res = await fetch("/api/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(settings),
+        body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error("Failed");
       alert("تم حفظ الإعدادات العامة بنجاح!");

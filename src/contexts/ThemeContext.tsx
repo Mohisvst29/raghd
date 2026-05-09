@@ -28,28 +28,14 @@ const defaultColors: ThemeColors = {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [colors, setColors] = useState<ThemeColors>(defaultColors);
-  const [logoUrl, setLogoUrl] = useState<string>("https://lh3.googleusercontent.com/aida/ADBb0ugQAN_RV5Z0Qj6QbnjgXQTOhDqInmfzS9gX6lYPwDXRnzmsITfO50plYVFKPzUjz_KfMkEyX2fU4I43_qarhh0ytjBbdrVCY-b9KJXWIXmGsnFiZaltGXaCke52D58wu77A2KO4HCuCOvfpSo2xRXDUWU5U_v2h_b_rE0GRLu0NKhE85jWe3GSrztPXtTMGoXx3_DbepWo04cwX3OlCOUTXK39zzGjVFKx5xpkrKvrB3A1s1PCbwWt-zp18JbX2U5mKWT7sp0Ut_sE");
-  const [logoSize, setLogoSize] = useState<number>(64); // default 64px
+export function ThemeProvider({ children, initialTheme }: { children: React.ReactNode, initialTheme?: Partial<ThemeContextType> }) {
+  const [colors, setColors] = useState<ThemeColors>(initialTheme?.colors || defaultColors);
+  const [logoUrl, setLogoUrl] = useState<string>(initialTheme?.logoUrl || "https://lh3.googleusercontent.com/aida/ADBb0ugQAN_RV5Z0Qj6QbnjgXQTOhDqInmfzS9gX6lYPwDXRnzmsITfO50plYVFKPzUjz_KfMkEyX2fU4I43_qarhh0ytjBbdrVCY-b9KJXWIXmGsnFiZaltGXaCke52D58wu77A2KO4HCuCOvfpSo2xRXDUWU5U_v2h_b_rE0GRLu0NKhE85jWe3GSrztPXtTMGoXx3_DbepWo04cwX3OlCOUTXK39zzGjVFKx5xpkrKvrB3A1s1PCbwWt-zp18JbX2U5mKWT7sp0Ut_sE");
+  const [logoSize, setLogoSize] = useState<number>(initialTheme?.logoSize || 64);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    const savedColors = localStorage.getItem("site_colors");
-    if (savedColors) {
-      try {
-        setColors(JSON.parse(savedColors));
-      } catch (e) {
-        console.error("Failed to parse colors");
-      }
-    }
-    
-    const savedLogo = localStorage.getItem("site_logo");
-    if (savedLogo) setLogoUrl(savedLogo);
-    
-    const savedLogoSize = localStorage.getItem("site_logo_size");
-    if (savedLogoSize) setLogoSize(parseInt(savedLogoSize));
   }, []);
 
   useEffect(() => {

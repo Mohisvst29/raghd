@@ -10,11 +10,29 @@ export const metadata: Metadata = {
   description: "الشريك الموثوق في التخليص الجمركي والخدمات اللوجستية",
 };
 
-export default function RootLayout({
+import { connectDB } from "@/lib/mongoose";
+import { Settings } from "@/models/Settings";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let dbTheme = {};
+  try {
+    await connectDB();
+    const settings = await Settings.findOne().lean();
+    if (settings) {
+      dbTheme = {
+        colors: settings.colors,
+        logoUrl: settings.logoUrl,
+        logoSize: settings.logoSize
+      };
+    }
+  } catch (err) {
+    console.error("Failed to load settings in layout", err);
+  }
+
   return (
     <html lang="ar" dir="rtl">
       <head>
@@ -29,7 +47,7 @@ export default function RootLayout({
         `}</style>
       </head>
       <body className="antialiased overflow-x-hidden">
-        <ThemeProvider>
+        <ThemeProvider initialTheme={dbTheme}>
           <LanguageProvider>
             <PageTransition>
               {children}

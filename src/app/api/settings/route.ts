@@ -19,13 +19,7 @@ export async function POST(req: Request) {
   try {
     await connectDB();
     const body = await req.json();
-    let settings = await Settings.findOne();
-    if (settings) {
-      Object.assign(settings, body);
-      await settings.save();
-    } else {
-      settings = await Settings.create(body);
-    }
+    const settings = await Settings.findOneAndUpdate({}, body, { new: true, upsert: true });
     return NextResponse.json({ success: true, data: settings });
   } catch (error) {
     return NextResponse.json({ error: "Failed to update settings" }, { status: 500 });
