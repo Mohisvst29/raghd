@@ -78,7 +78,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
             >
               <div className="flex items-center gap-2 text-primary font-bold">
                 <span className="w-8 h-1 bg-primary"></span>
-                <span className="text-label-sm uppercase tracking-wider">من نحن</span>
+                <span className="text-label-sm uppercase tracking-wider">{lang === 'ar' ? 'من نحن' : 'About Us'}</span>
               </div>
               <h2 className="font-headline-lg text-headline-lg text-primary">{about.title || about.heading}</h2>
               <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed whitespace-pre-line">
@@ -152,7 +152,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                   
                   <div className="p-8 flex-1 flex flex-col">
                     <div className="mb-6 flex-1">
-                      <h4 className="text-sm font-bold text-secondary uppercase tracking-widest mb-4">الخدمات المشمولة</h4>
+                      <h4 className="text-sm font-bold text-secondary uppercase tracking-widest mb-4">{lang === 'ar' ? 'الخدمات المشمولة' : 'Included Services'}</h4>
                       <div className="flex flex-wrap gap-2">
                         {(service.sub_services?.length > 0 ? service.sub_services : service.features?.split(","))?.map((item: string, i: number) => item.trim() && (
                           <span key={i} className="inline-flex items-center bg-surface-container text-on-surface-variant text-sm px-3 py-1.5 rounded-full border border-outline-variant">
@@ -165,7 +165,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
 
                     {service.logos && service.logos.length > 0 && (
                       <div className="mb-8 pt-6 border-t border-outline-variant">
-                        <h4 className="text-xs font-bold text-on-surface-variant mb-4">الجهات المرتبطة</h4>
+                        <h4 className="text-xs font-bold text-on-surface-variant mb-4">{lang === 'ar' ? 'الجهات المرتبطة' : 'Associated Entities'}</h4>
                         <div className="flex gap-4 flex-wrap items-center">
                           {service.logos.map((logo: string, lIdx: number) => (
                             <div key={lIdx} className="bg-surface-container-lowest p-2 rounded-xl border border-outline-variant hover:border-primary/30 hover:shadow-sm transition-all">
@@ -178,7 +178,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
 
                     <div className="mt-auto">
                       <a href={service.button_link || "/contact"} className="flex items-center justify-center gap-2 w-full bg-surface-container text-primary font-bold py-4 rounded-xl border border-outline-variant hover:bg-primary hover:text-white transition-all duration-300 group/btn">
-                        {service.button_text || "اطلب الخدمة الآن"}
+                        {service.button_text || (lang === 'ar' ? "اطلب الخدمة الآن" : "Order Service Now")}
                         <span className="material-symbols-outlined text-[20px] transform group-hover/btn:-translate-x-1 transition-transform">arrow_back</span>
                       </a>
                     </div>
@@ -186,7 +186,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                 </motion.div>
               ))
             ) : (
-              <div className="col-span-full text-center text-on-surface-variant py-20">لا توجد خدمات مضافة حالياً.</div>
+              <div className="col-span-full text-center text-on-surface-variant py-20">{lang === 'ar' ? 'لا توجد خدمات مضافة حالياً.' : 'No services added yet.'}</div>
             )}
           </div>
         </div>
@@ -196,7 +196,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
       {accreditedEntities && accreditedEntities.logos && accreditedEntities.logos.length > 0 && (
         <section className="py-12 bg-white border-y border-outline-variant overflow-hidden">
           <div className="max-w-[1280px] mx-auto px-margin mb-8 text-center">
-            <h3 className="text-xl font-bold text-on-surface-variant uppercase tracking-widest">{accreditedEntities.title || "الجهات المعتمدة"}</h3>
+            <h3 className="text-xl font-bold text-on-surface-variant uppercase tracking-widest">{accreditedEntities.title || (lang === 'ar' ? "الجهات المعتمدة" : "Accredited Entities")}</h3>
           </div>
           <div className="relative w-full flex overflow-x-hidden">
             <div className="flex gap-16 items-center px-8 animate-marquee whitespace-nowrap">

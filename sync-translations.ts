@@ -15,6 +15,7 @@ async function syncTranslations() {
     if (content) {
       console.log("Translating Content...");
       const contentObj = JSON.parse(JSON.stringify(content));
+      delete contentObj.en;
       const translatedEn = await translateObject(contentObj);
       await Content.findByIdAndUpdate(content._id, { en: translatedEn }, { new: true });
       console.log("Content translated successfully.");
