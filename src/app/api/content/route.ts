@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { connectDB } from "../../../lib/mongoose";
 import { Content } from "@/models/Content";
 
+export const dynamic = 'force-dynamic';
+
 // Default content to seed if DB is empty
 const defaultContent = {
   hero: {
