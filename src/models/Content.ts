@@ -81,7 +81,8 @@ const ContentSchema = new mongoose.Schema({
   accreditedEntities: {
     title: { type: String },
     logos: [{ type: String }],
-  }
+  },
+  en: { type: mongoose.Schema.Types.Mixed },
 }, { timestamps: true, strict: false });
 
 delete mongoose.models.Content;

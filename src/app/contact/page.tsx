@@ -9,7 +9,7 @@ export default async function Contact() {
   
   try {
     await connectDB();
-    const dbContent = await Content.findOne();
+    const dbContent = await Content.findOne().lean();
     if (dbContent) {
       siteContent = JSON.parse(JSON.stringify(dbContent));
     }

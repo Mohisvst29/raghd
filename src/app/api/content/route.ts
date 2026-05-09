@@ -63,7 +63,7 @@ const defaultContent = {
 export async function GET() {
   try {
     await connectDB();
-    let content = await Content.findOne();
+    let content = await Content.findOne().lean();
     
     // Seed default if empty
     if (!content) {

@@ -8,7 +8,7 @@ export default async function WhyUsPage() {
   let siteContent = null;
   try {
     await connectDB();
-    const dbContent = await Content.findOne();
+    const dbContent = await Content.findOne().lean();
     if (dbContent) {
       siteContent = JSON.parse(JSON.stringify(dbContent));
     }

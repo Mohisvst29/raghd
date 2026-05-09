@@ -8,7 +8,7 @@ import BlogPostContent from "@/components/BlogPostContent";
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
   await connectDB();
   const { slug } = await params;
-  const dbPost = await Post.findOne({ slug });
+  const dbPost = await Post.findOne({ slug }).lean();
   
   if (!dbPost) {
     notFound();

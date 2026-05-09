@@ -12,11 +12,11 @@ export default async function Blog() {
   
   try {
     await connectDB();
-    const dbContent = await Content.findOne();
+    const dbContent = await Content.findOne().lean();
     if (dbContent) {
       siteContent = JSON.parse(JSON.stringify(dbContent));
     }
-    const dbPosts = await Post.find({ status: "منشور" }).sort({ createdAt: -1 });
+    const dbPosts = await Post.find({ status: "منشور" }).sort({ createdAt: -1 }).lean();
     posts = JSON.parse(JSON.stringify(dbPosts));
   } catch (error) {
     console.error("Failed to fetch content server-side:", error);

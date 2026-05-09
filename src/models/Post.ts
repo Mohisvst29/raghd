@@ -9,6 +9,7 @@ const PostSchema = new mongoose.Schema({
   image: { type: String },
   status: { type: String, default: "مسودة" }, // منشور أو مسودة
   views: { type: Number, default: 0 },
-}, { timestamps: true });
+  en: { type: mongoose.Schema.Types.Mixed },
+}, { timestamps: true, strict: false });
 
 export const Post = mongoose.models.Post || mongoose.model("Post", PostSchema);
