@@ -57,8 +57,8 @@ export default function AdminContent() {
 
 
 
-  const handleNestedChangeEn = (section, field, value) => {
-    setContent((prev) => ({
+  const handleNestedChangeEn = (section: string, field: string, value: any) => {
+    setContent((prev: any) => ({
       ...prev,
       en: {
         ...(prev.en || {}),
