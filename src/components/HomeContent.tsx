@@ -246,13 +246,16 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                 <p className="text-body-md text-on-surface-variant mb-stack-md whitespace-pre-line">{contact.description || contact.desc}</p>
                 
                 <div className="space-y-6">
+
                   <div className="flex items-center gap-4">
                     <div className="bg-white p-3 rounded-full shadow-sm">
                       <span className="material-symbols-outlined text-primary">call</span>
                     </div>
                     <div>
                       <p className="text-label-sm text-secondary">{t.home.contact.callUs}</p>
-                      <p className="text-body-md font-bold text-primary" dir="ltr">0506468204 | 0568094648</p>
+                      {(contact?.phones?.length > 0 ? contact.phones : ["0506468204", "0568094648"]).map((phone: string, i: number) => (
+                        <p key={i} className="text-body-md font-bold text-primary" dir="ltr">{phone}</p>
+                      ))}
                     </div>
                   </div>
                   
@@ -262,7 +265,9 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                     </div>
                     <div>
                       <p className="text-label-sm text-secondary">{t.home.contact.emailUs}</p>
-                      <p className="text-body-md font-bold text-primary">ceo@raghadports.com</p>
+                      {(contact?.emails?.length > 0 ? contact.emails : ["ceo@raghadports.com"]).map((email: string, i: number) => (
+                        <p key={i} className="text-body-md font-bold text-primary">{email}</p>
+                      ))}
                     </div>
                   </div>
                   
@@ -272,7 +277,9 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                     </div>
                     <div>
                       <p className="text-label-sm text-secondary">{t.home.contact.location}</p>
-                      <p className="text-body-md font-bold text-primary">{t.home.contact.locationDesc}</p>
+                      {(contact?.locations?.length > 0 ? contact.locations : [t.home.contact.locationDesc]).map((loc: string, i: number) => (
+                        <p key={i} className="text-body-md font-bold text-primary">{loc}</p>
+                      ))}
                     </div>
                   </div>
                 </div>

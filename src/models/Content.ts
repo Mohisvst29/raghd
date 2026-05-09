@@ -68,6 +68,15 @@ const ContentSchema = new mongoose.Schema({
     phones: [{ type: String }],
     emails: [{ type: String }],
     locations: [{ type: String }],
+    socialMedia: {
+      whatsapp: { type: String },
+      twitter: { type: String },
+      linkedin: { type: String },
+      instagram: { type: String },
+      facebook: { type: String },
+      snapchat: { type: String },
+      tiktok: { type: String },
+    }
   },
   accreditedEntities: {
     title: { type: String },

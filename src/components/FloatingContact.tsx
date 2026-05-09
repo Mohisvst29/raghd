@@ -5,9 +5,22 @@ import { useEffect, useState } from "react";
 
 export default function FloatingContact() {
   const [mounted, setMounted] = useState(false);
+  const [phone, setPhone] = useState("0506468204");
+  const [whatsapp, setWhatsapp] = useState("https://wa.me/966506468204");
 
   useEffect(() => {
     setMounted(true);
+    fetch('/api/content')
+      .then(res => res.json())
+      .then(data => {
+        if (data?.contact?.phones?.length > 0) {
+          setPhone(data.contact.phones[0]);
+        }
+        if (data?.contact?.socialMedia?.whatsapp) {
+          setWhatsapp(data.contact.socialMedia.whatsapp);
+        }
+      })
+      .catch(console.error);
   }, []);
 
   if (!mounted) return null;
@@ -16,7 +29,7 @@ export default function FloatingContact() {
     <div className="fixed bottom-6 left-6 z-50 flex flex-col gap-4">
       {/* Phone Icon */}
       <motion.a
-        href="tel:0506468204"
+        href={`tel:${phone.replace(/\s+/g, '')}`}
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.1 }}
@@ -32,7 +45,7 @@ export default function FloatingContact() {
 
       {/* WhatsApp Icon */}
       <motion.a
-        href="https://wa.me/966506468204"
+        href={whatsapp}
         target="_blank"
         rel="noopener noreferrer"
         initial={{ scale: 0, opacity: 0 }}

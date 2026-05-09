@@ -685,6 +685,26 @@ export default function AdminContent() {
               </div>
 
               <div className="space-y-4">
+                <h3 className="font-bold text-on-surface border-b border-outline-variant pb-2">روابط وسائل التواصل الاجتماعي</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {['whatsapp', 'twitter', 'linkedin', 'instagram', 'facebook', 'snapchat', 'tiktok'].map(platform => (
+                    <div key={platform}>
+                      <label className="block text-sm font-bold text-on-surface mb-1 capitalize">{platform}</label>
+                      <input 
+                        type="url" 
+                        value={content.contact?.socialMedia?.[platform] || ''} 
+                        onChange={(e) => {
+                          const updatedSocial = { ...(content.contact.socialMedia || {}), [platform]: e.target.value };
+                          handleNestedChange("contact", "socialMedia", updatedSocial);
+                        }} 
+                        className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 focus:ring-1 focus:ring-primary outline-none" dir="ltr" placeholder={`https://${platform}.com/...`}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-4">
                 <h3 className="font-bold text-on-surface border-b border-outline-variant pb-2">نصوص النموذج (Form)</h3>
                 <div>
                   <label className="block text-sm font-bold text-on-surface mb-1">تسمية قائمة "نوع الخدمة"</label>
