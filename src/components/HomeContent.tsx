@@ -254,8 +254,8 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                       <span className="material-symbols-outlined text-primary">call</span>
                     </div>
                     <div>
-                      <p className="text-label-sm text-secondary">{t.home.contact.callUs}</p>
-                      {(contact?.phones?.length > 0 ? contact.phones : ["0506468204", "0568094648"]).map((phone: string, i: number) => (
+                      <p className="text-label-sm text-secondary">{t.home.contact.callUs || "Call Us"}</p>
+                      {((contact?.phones && Array.isArray(contact.phones) && contact.phones.filter(Boolean).length > 0) ? contact.phones.filter(Boolean) : ["0506468204", "0568094648"]).map((phone: string, i: number) => (
                         <p key={i} className="text-body-md font-bold text-primary" dir="ltr">{phone}</p>
                       ))}
                     </div>
@@ -266,8 +266,8 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                       <span className="material-symbols-outlined text-primary">mail</span>
                     </div>
                     <div>
-                      <p className="text-label-sm text-secondary">{t.home.contact.emailUs}</p>
-                      {(contact?.emails?.length > 0 ? contact.emails : ["ceo@raghadports.com"]).map((email: string, i: number) => (
+                      <p className="text-label-sm text-secondary">{t.home.contact.emailUs || "Email Us"}</p>
+                      {((contact?.emails && Array.isArray(contact.emails) && contact.emails.filter(Boolean).length > 0) ? contact.emails.filter(Boolean) : ["ceo@raghadports.com"]).map((email: string, i: number) => (
                         <p key={i} className="text-body-md font-bold text-primary">{email}</p>
                       ))}
                     </div>
@@ -278,8 +278,8 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                       <span className="material-symbols-outlined text-primary">location_on</span>
                     </div>
                     <div>
-                      <p className="text-label-sm text-secondary">{t.home.contact.location}</p>
-                      {(contact?.locations?.length > 0 ? contact.locations : [t.home.contact.locationDesc]).map((loc: string, i: number) => (
+                      <p className="text-label-sm text-secondary">{t.home.contact.location || "Location"}</p>
+                      {((contact?.locations && Array.isArray(contact.locations) && contact.locations.filter(Boolean).length > 0) ? contact.locations.filter(Boolean) : [t.home.contact.locationDesc || "Jeddah Islamic Port"]).map((loc: string, i: number) => (
                         <p key={i} className="text-body-md font-bold text-primary">{loc}</p>
                       ))}
                     </div>

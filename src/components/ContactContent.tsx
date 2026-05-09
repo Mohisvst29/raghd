@@ -46,7 +46,7 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                 </div>
                 <div className="text-right">
                   <p className="text-xs font-bold text-secondary uppercase tracking-wider">{p.infoPhones}</p>
-                  {(contact?.phones?.length > 0 ? contact.phones : ["0506468204", "0568094648"]).map((phone: string, i: number) => (
+                  {((contact?.phones && Array.isArray(contact.phones) && contact.phones.filter(Boolean).length > 0) ? contact.phones.filter(Boolean) : ["0506468204", "0568094648"]).map((phone: string, i: number) => (
                     <p key={i} className="text-primary font-bold mt-1" dir="ltr">{phone}</p>
                   ))}
                 </div>
@@ -59,7 +59,7 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                 </div>
                 <div className="text-right">
                   <p className="text-xs font-bold text-secondary uppercase tracking-wider">{p.infoEmail}</p>
-                  {(contact?.emails?.length > 0 ? contact.emails : ["ceo@raghadports.com"]).map((email: string, i: number) => (
+                  {((contact?.emails && Array.isArray(contact.emails) && contact.emails.filter(Boolean).length > 0) ? contact.emails.filter(Boolean) : ["ceo@raghadports.com"]).map((email: string, i: number) => (
                     <p key={i} className="text-primary font-bold mt-1">{email}</p>
                   ))}
                 </div>
@@ -72,7 +72,7 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                 </div>
                 <div className="text-right">
                   <p className="text-xs font-bold text-secondary uppercase tracking-wider">{p.infoLocation}</p>
-                  {(contact?.locations?.length > 0 ? contact.locations : [lang === 'ar' ? "ميناء جدة الإسلامي، مبنى الخدمات اللوجستية" : "Jeddah Islamic Port, Logistics Building"]).map((loc: string, i: number) => (
+                  {((contact?.locations && Array.isArray(contact.locations) && contact.locations.filter(Boolean).length > 0) ? contact.locations.filter(Boolean) : [lang === 'ar' ? "ميناء جدة الإسلامي، مبنى الخدمات اللوجستية" : "Jeddah Islamic Port, Logistics Building"]).map((loc: string, i: number) => (
                     <p key={i} className="text-primary font-bold mt-1">{loc}</p>
                   ))}
                 </div>
