@@ -48,8 +48,9 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                 </div>
                 <div className="text-right">
                   <p className="text-xs font-bold text-secondary uppercase tracking-wider">{p.infoPhones}</p>
-                  <p className="text-primary font-bold mt-1" dir="ltr">0506468204</p>
-                  <p className="text-primary font-bold" dir="ltr">0568094648</p>
+                  {(contact?.phones?.length > 0 ? contact.phones : ["0506468204", "0568094648"]).map((phone: string, i: number) => (
+                    <p key={i} className="text-primary font-bold mt-1" dir="ltr">{phone}</p>
+                  ))}
                 </div>
               </div>
 
@@ -60,7 +61,9 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                 </div>
                 <div className="text-right">
                   <p className="text-xs font-bold text-secondary uppercase tracking-wider">{p.infoEmail}</p>
-                  <p className="text-primary font-bold mt-1">ceo@raghadports.com</p>
+                  {(contact?.emails?.length > 0 ? contact.emails : ["ceo@raghadports.com"]).map((email: string, i: number) => (
+                    <p key={i} className="text-primary font-bold mt-1">{email}</p>
+                  ))}
                 </div>
               </div>
 
@@ -71,7 +74,9 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                 </div>
                 <div className="text-right">
                   <p className="text-xs font-bold text-secondary uppercase tracking-wider">{p.infoLocation}</p>
-                  <p className="text-primary font-bold mt-1">{lang === 'ar' ? "ميناء جدة الإسلامي، مبنى الخدمات اللوجستية" : "Jeddah Islamic Port, Logistics Building"}</p>
+                  {(contact?.locations?.length > 0 ? contact.locations : [lang === 'ar' ? "ميناء جدة الإسلامي، مبنى الخدمات اللوجستية" : "Jeddah Islamic Port, Logistics Building"]).map((loc: string, i: number) => (
+                    <p key={i} className="text-primary font-bold mt-1">{loc}</p>
+                  ))}
                 </div>
               </div>
             </div>

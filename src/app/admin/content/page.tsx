@@ -616,6 +616,72 @@ export default function AdminContent() {
                   <label className="block text-sm font-bold text-on-surface mb-1">وصف القسم</label>
                   <textarea value={content.contact.description} onChange={(e) => handleNestedChange("contact", "description", e.target.value)} className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 focus:ring-1 focus:ring-primary outline-none" rows={3} />
                 </div>
+                
+                {/* Phones */}
+                <div>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="block text-sm font-bold text-on-surface">أرقام الجوال</label>
+                    <button onClick={() => handleNestedChange("contact", "phones", [...(content.contact.phones || []), ""])} className="text-xs bg-primary text-white px-2 py-1 rounded">إضافة رقم</button>
+                  </div>
+                  {(content.contact.phones || []).map((phone: string, idx: number) => (
+                    <div key={idx} className="flex gap-2 mb-2">
+                      <input type="text" value={phone} onChange={(e) => {
+                        const newArr = [...(content.contact.phones || [])];
+                        newArr[idx] = e.target.value;
+                        handleNestedChange("contact", "phones", newArr);
+                      }} className="flex-1 bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 text-sm focus:ring-1 focus:ring-primary outline-none" dir="ltr" />
+                      <button onClick={() => {
+                        const newArr = [...(content.contact.phones || [])];
+                        newArr.splice(idx, 1);
+                        handleNestedChange("contact", "phones", newArr);
+                      }} className="bg-error text-white px-3 rounded-lg text-xs">حذف</button>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Emails */}
+                <div>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="block text-sm font-bold text-on-surface">البريد الإلكتروني</label>
+                    <button onClick={() => handleNestedChange("contact", "emails", [...(content.contact.emails || []), ""])} className="text-xs bg-primary text-white px-2 py-1 rounded">إضافة إيميل</button>
+                  </div>
+                  {(content.contact.emails || []).map((email: string, idx: number) => (
+                    <div key={idx} className="flex gap-2 mb-2">
+                      <input type="email" value={email} onChange={(e) => {
+                        const newArr = [...(content.contact.emails || [])];
+                        newArr[idx] = e.target.value;
+                        handleNestedChange("contact", "emails", newArr);
+                      }} className="flex-1 bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 text-sm focus:ring-1 focus:ring-primary outline-none" dir="ltr" />
+                      <button onClick={() => {
+                        const newArr = [...(content.contact.emails || [])];
+                        newArr.splice(idx, 1);
+                        handleNestedChange("contact", "emails", newArr);
+                      }} className="bg-error text-white px-3 rounded-lg text-xs">حذف</button>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Locations */}
+                <div>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="block text-sm font-bold text-on-surface">العناوين والمقرات</label>
+                    <button onClick={() => handleNestedChange("contact", "locations", [...(content.contact.locations || []), ""])} className="text-xs bg-primary text-white px-2 py-1 rounded">إضافة عنوان</button>
+                  </div>
+                  {(content.contact.locations || []).map((loc: string, idx: number) => (
+                    <div key={idx} className="flex gap-2 mb-2">
+                      <input type="text" value={loc} onChange={(e) => {
+                        const newArr = [...(content.contact.locations || [])];
+                        newArr[idx] = e.target.value;
+                        handleNestedChange("contact", "locations", newArr);
+                      }} className="flex-1 bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 text-sm focus:ring-1 focus:ring-primary outline-none" />
+                      <button onClick={() => {
+                        const newArr = [...(content.contact.locations || [])];
+                        newArr.splice(idx, 1);
+                        handleNestedChange("contact", "locations", newArr);
+                      }} className="bg-error text-white px-3 rounded-lg text-xs">حذف</button>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className="space-y-4">

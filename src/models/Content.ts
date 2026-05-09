@@ -65,6 +65,9 @@ const ContentSchema = new mongoose.Schema({
     serviceLabel: { type: String },
     serviceOptions: { type: String }, // Comma separated string
     submitBtn: { type: String },
+    phones: [{ type: String }],
+    emails: [{ type: String }],
+    locations: [{ type: String }],
   },
   accreditedEntities: {
     title: { type: String },
