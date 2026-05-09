@@ -13,8 +13,21 @@ export default function AdminContent() {
   // Fetch initial content
   useEffect(() => {
     fetch("/api/content")
-      .then(res => res.json())
-      .then(data => {
+      .then(async res => {
+        if (!res.ok) throw new Error("Failed to fetch");
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+        if (!data.accreditedEntities) {
+          data.accreditedEntities = { title: "الجهات المعتمدة", logos: [] };
+        }
+        if (data.services && (!data.services.items || data.services.items.length === 0)) {
+          data.services.items = [
+            { title: "التخليص الجمركي", short_description: "تخليص الواردات والصادرات وتتبعها بدقة متناهية.", button_text: "اطلب الخدمة الآن", sub_services: ["تخليص واردات", "تخليص صادرات", "ترانزيت"], status: true, order: 1 },
+            { title: "الخدمات الاستشارية", short_description: "استشارات جمركية ولوجستية احترافية لتطوير أعمالك.", button_text: "طلب استشارة", sub_services: ["التصنيف الجمركي", "الإعفاءات", "لوائح فسح"], status: true, order: 2 },
+            { title: "متابعة الشحنات", short_description: "نظام تتبع لحظي لشحناتك من الانطلاق حتى الوصول.", button_text: "تتبع شحنتك", sub_services: ["تتبع حاويات", "إشعارات يومية", "تقارير مفصلة"], status: true, order: 3 },
+            { title: "الخدمات الإضافية", short_description: "خدمات شحن مستودعات وتأمين متكاملة.", button_text: "المزيد", sub_services: ["التخزين", "النقل البري", "التأمين المائي"], status: true, order: 4 },
+          ];
+        }
         setContent(data);
         setIsLoading(false);
       })
@@ -51,8 +64,12 @@ export default function AdminContent() {
     }));
   };
 
-  if (isLoading || !content) {
+  if (isLoading) {
     return <div className="flex justify-center p-20"><div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div></div>;
+  }
+
+  if (!content || !content.hero) {
+    return <div className="p-20 text-center text-error font-bold text-lg">فشل في تحميل المحتوى من قاعدة البيانات. يرجى التأكد من تشغيل MongoDB.</div>;
   }
 
   return (
@@ -74,7 +91,7 @@ export default function AdminContent() {
       
       {/* Tabs */}
       <div className="flex border-b border-outline-variant mb-6 gap-6 overflow-x-auto pb-2">
-        {["hero", "about", "services", "whyus", "blog", "contact"].map((tab) => (
+        {["hero", "about", "services", "whyus", "blog", "contact", "accreditedEntities"].map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -88,6 +105,7 @@ export default function AdminContent() {
             {tab === "whyus" && "لماذا نحن"}
             {tab === "blog" && "المدونة بالرئيسية"}
             {tab === "contact" && "نموذج الاتصال"}
+            {tab === "accreditedEntities" && "الجهات المعتمدة"}
             {activeTab === tab && (
               <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-t-full" />
             )}
@@ -190,6 +208,16 @@ export default function AdminContent() {
         {activeTab === "about" && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
             <h2 className="text-title-lg text-primary font-bold mb-4">إدارة قسم: من نحن</h2>
+            <div className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant mb-4">
+              <ImageUploader 
+                label="صورة الهيرو (الخلفية العلوية لصفحة من نحن)"
+                currentUrl={content.about.heroImage}
+                onUpload={(url) => handleNestedChange("about", "heroImage", url)}
+              />
+              {content.about.heroImage && (
+                <img src={content.about.heroImage} className="mt-4 h-32 w-full object-cover rounded-lg" alt="About Hero" />
+              )}
+            </div>
             <div>
               <label className="block text-sm font-bold text-on-surface mb-1">العنوان</label>
               <input type="text" value={content.about.title} onChange={(e) => handleNestedChange("about", "title", e.target.value)} className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 focus:ring-1 focus:ring-primary outline-none" />
@@ -228,7 +256,17 @@ export default function AdminContent() {
         {/* SERVICES SECTION */}
         {activeTab === "services" && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-            <h2 className="text-title-lg text-primary font-bold mb-4">إدارة قسم: الخدمات المباشرة بالرئيسية</h2>
+            <h2 className="text-title-lg text-primary font-bold mb-4">إدارة قسم: الخدمات (يظهر في الرئيسية وصفحة الخدمات المستقلة)</h2>
+            <div className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant mb-4">
+              <ImageUploader 
+                label="صورة الهيرو (تظهر في أعلى صفحة الخدمات المستقلة فقط - وليس الرئيسية)"
+                currentUrl={content.services.heroImage}
+                onUpload={(url) => handleNestedChange("services", "heroImage", url)}
+              />
+              {content.services.heroImage && (
+                <img src={content.services.heroImage} className="mt-4 h-32 w-full object-cover rounded-lg" alt="Services Hero" />
+              )}
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-bold text-on-surface mb-1">العنوان الرئيسي</label>
@@ -245,46 +283,34 @@ export default function AdminContent() {
                 عناصر الخدمات
                 <button 
                   onClick={() => {
-                    const newItems = [...content.services.items, { icon: "star", title: "خدمة جديدة", features: "نقطة 1, نقطة 2" }];
+                    const newItems = [...content.services.items, { icon: "star", image: "", main_image: "", title: "خدمة جديدة", slug: "new-service", short_description: "", features: "", sub_services: [], logos: [], button_text: "اطلب الخدمة", button_link: "/contact", status: true, order: content.services.items.length + 1 }];
                     setContent({ ...content, services: { ...content.services, items: newItems } });
                   }}
                   className="text-primary text-sm flex items-center gap-1"
                 >
-                  <span className="material-symbols-outlined text-[18px]">add</span> إضافة
+                  <span className="material-symbols-outlined text-[18px]">add</span> إضافة خدمة
                 </button>
               </h3>
               
-              {content.services.items.map((item: any, idx: number) => (
-                <div key={idx} className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant relative">
+              {content.services.items.sort((a: any, b: any) => (a.order || 0) - (b.order || 0)).map((item: any, idx: number) => (
+                <div key={idx} className="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant relative shadow-sm">
                   <button 
                     onClick={() => {
                       const newItems = [...content.services.items];
                       newItems.splice(idx, 1);
                       setContent({ ...content, services: { ...content.services, items: newItems } });
                     }}
-                    className="absolute top-2 left-2 text-error text-xs p-1"
+                    className="absolute top-4 left-4 text-error text-xs p-1 font-bold flex items-center gap-1"
                   >
-                    حذف
+                    <span className="material-symbols-outlined text-[16px]">delete</span> حذف
                   </button>
-                  <div className="flex gap-4">
-                    <div className="w-16">
-                      <label className="block text-xs font-bold text-on-surface mb-1">الأيقونة</label>
-                      <input 
-                        type="text" 
-                        value={item.icon} 
-                        onChange={(e) => {
-                          const newItems = [...content.services.items];
-                          newItems[idx].icon = e.target.value;
-                          setContent({ ...content, services: { ...content.services, items: newItems } });
-                        }}
-                        className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-2 py-2 text-center text-sm focus:ring-1 focus:ring-primary outline-none" dir="ltr" 
-                      />
-                    </div>
-                    <div className="flex-1">
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
                       <label className="block text-xs font-bold text-on-surface mb-1">اسم الخدمة</label>
                       <input 
                         type="text" 
-                        value={item.title} 
+                        value={item.title || ""} 
                         onChange={(e) => {
                           const newItems = [...content.services.items];
                           newItems[idx].title = e.target.value;
@@ -293,19 +319,155 @@ export default function AdminContent() {
                         className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none" 
                       />
                     </div>
+                    <div>
+                      <label className="block text-xs font-bold text-on-surface mb-1">الرابط المخصص (Slug)</label>
+                      <input 
+                        type="text" 
+                        value={item.slug || ""} 
+                        onChange={(e) => {
+                          const newItems = [...content.services.items];
+                          newItems[idx].slug = e.target.value;
+                          setContent({ ...content, services: { ...content.services, items: newItems } });
+                        }}
+                        className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none text-left" dir="ltr"
+                      />
+                    </div>
                   </div>
-                  <div className="mt-3">
-                    <label className="block text-xs font-bold text-on-surface mb-1">النقاط الفرعية (مفصولة بفاصلة)</label>
-                    <input 
-                      type="text" 
-                      value={item.features} 
+
+                  <div className="mb-4">
+                    <label className="block text-xs font-bold text-on-surface mb-1">وصف مختصر</label>
+                    <textarea 
+                      value={item.short_description || ""} 
                       onChange={(e) => {
                         const newItems = [...content.services.items];
-                        newItems[idx].features = e.target.value;
+                        newItems[idx].short_description = e.target.value;
                         setContent({ ...content, services: { ...content.services, items: newItems } });
                       }}
-                      className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none" 
+                      className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none h-20" 
                     />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <ImageUploader 
+                        label="الصورة الرئيسية"
+                        currentUrl={item.main_image || item.image}
+                        onUpload={(url) => {
+                          const newItems = [...content.services.items];
+                          newItems[idx].main_image = url;
+                          newItems[idx].image = url; // Fallback
+                          setContent({ ...content, services: { ...content.services, items: newItems } });
+                        }}
+                      />
+                      {(item.main_image || item.image) && (
+                        <img src={item.main_image || item.image} className="mt-2 h-20 w-full object-cover rounded-lg" alt="Main" />
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-on-surface mb-1">الخدمات الفرعية (مفصولة بفاصلة)</label>
+                      <textarea 
+                        value={(item.sub_services?.length > 0 ? item.sub_services.join(", ") : item.features) || ""} 
+                        onChange={(e) => {
+                          const newItems = [...content.services.items];
+                          const subArr = e.target.value.split(",").map(s => s.trim());
+                          newItems[idx].sub_services = subArr;
+                          newItems[idx].features = e.target.value; // Fallback
+                          setContent({ ...content, services: { ...content.services, items: newItems } });
+                        }}
+                        className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none h-20" 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="bg-surface-container-high p-4 rounded-xl mb-4">
+                    <div className="flex justify-between items-center mb-2">
+                      <label className="block text-xs font-bold text-on-surface">شعارات الجهات (Logos)</label>
+                      <ImageUploader 
+                        label=""
+                        currentUrl=""
+                        onUpload={(url) => {
+                          const newItems = [...content.services.items];
+                          if (!newItems[idx].logos) newItems[idx].logos = [];
+                          newItems[idx].logos.push(url);
+                          setContent({ ...content, services: { ...content.services, items: newItems } });
+                        }}
+                      />
+                    </div>
+                    <div className="flex gap-2 flex-wrap mt-2">
+                      {item.logos && item.logos.map((logo: string, lIdx: number) => (
+                        <div key={lIdx} className="relative group">
+                          <img src={logo} className="h-12 w-12 object-contain bg-white rounded border border-outline-variant p-1" alt="Logo" />
+                          <button 
+                            onClick={() => {
+                              const newItems = [...content.services.items];
+                              newItems[idx].logos.splice(lIdx, 1);
+                              setContent({ ...content, services: { ...content.services, items: newItems } });
+                            }}
+                            className="absolute -top-2 -right-2 bg-error text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                      {(!item.logos || item.logos.length === 0) && (
+                        <span className="text-xs text-on-surface-variant italic">لا يوجد شعارات، يمكنك الرفع من الزر أعلاه</span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 items-end">
+                    <div>
+                      <label className="block text-xs font-bold text-on-surface mb-1">نص الزر</label>
+                      <input 
+                        type="text" 
+                        value={item.button_text || "اطلب الخدمة"} 
+                        onChange={(e) => {
+                          const newItems = [...content.services.items];
+                          newItems[idx].button_text = e.target.value;
+                          setContent({ ...content, services: { ...content.services, items: newItems } });
+                        }}
+                        className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none" 
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-on-surface mb-1">رابط الزر</label>
+                      <input 
+                        type="text" 
+                        value={item.button_link || "/contact"} 
+                        onChange={(e) => {
+                          const newItems = [...content.services.items];
+                          newItems[idx].button_link = e.target.value;
+                          setContent({ ...content, services: { ...content.services, items: newItems } });
+                        }}
+                        className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none text-left" dir="ltr"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-on-surface mb-1">الترتيب</label>
+                      <input 
+                        type="number" 
+                        value={item.order || 0} 
+                        onChange={(e) => {
+                          const newItems = [...content.services.items];
+                          newItems[idx].order = parseInt(e.target.value) || 0;
+                          setContent({ ...content, services: { ...content.services, items: newItems } });
+                        }}
+                        className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none text-center" 
+                      />
+                    </div>
+                    <div className="flex items-center gap-2 h-[38px]">
+                      <input 
+                        type="checkbox" 
+                        checked={item.status !== false} 
+                        onChange={(e) => {
+                          const newItems = [...content.services.items];
+                          newItems[idx].status = e.target.checked;
+                          setContent({ ...content, services: { ...content.services, items: newItems } });
+                        }}
+                        className="w-4 h-4 text-primary bg-surface-container-low border-outline-variant rounded focus:ring-primary focus:ring-2"
+                      />
+                      <label className="text-xs font-bold text-on-surface">مفعل</label>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -317,6 +479,16 @@ export default function AdminContent() {
         {activeTab === "whyus" && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
             <h2 className="text-title-lg text-primary font-bold mb-4">إدارة قسم: لماذا تختارنا</h2>
+            <div className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant mb-4">
+              <ImageUploader 
+                label="صورة الهيرو (الخلفية العلوية لصفحة لماذا نحن)"
+                currentUrl={content.whyUs.heroImage}
+                onUpload={(url) => handleNestedChange("whyUs", "heroImage", url)}
+              />
+              {content.whyUs.heroImage && (
+                <img src={content.whyUs.heroImage} className="mt-4 h-32 w-full object-cover rounded-lg" alt="Why Us Hero" />
+              )}
+            </div>
             <div>
               <label className="block text-sm font-bold text-on-surface mb-1">العنوان الرئيسي</label>
               <input type="text" value={content.whyUs.title} onChange={(e) => handleNestedChange("whyUs", "title", e.target.value)} className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 focus:ring-1 focus:ring-primary outline-none" />
@@ -325,7 +497,7 @@ export default function AdminContent() {
             <div className="flex justify-end">
               <button 
                 onClick={() => {
-                  const newFeatures = [...content.whyUs.features, { icon: "star", title: "ميزة جديدة", description: "وصف الميزة الجديدة" }];
+                  const newFeatures = [...(content.whyUs.features || []), { icon: "star", title: "ميزة جديدة", description: "وصف الميزة الجديدة" }];
                   setContent({ ...content, whyUs: { ...content.whyUs, features: newFeatures } });
                 }}
                 className="bg-primary-container text-on-primary-container px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-1"
@@ -335,7 +507,7 @@ export default function AdminContent() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-              {content.whyUs.features.map((feature: any, idx: number) => (
+              {(content.whyUs.features || []).map((feature: any, idx: number) => (
                 <div key={idx} className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant space-y-3 relative">
                   <button 
                     onClick={() => {
@@ -395,6 +567,16 @@ export default function AdminContent() {
         {activeTab === "blog" && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
             <h2 className="text-title-lg text-primary font-bold mb-4">إدارة قسم: المدونة (الصفحة الرئيسية)</h2>
+            <div className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant mb-4">
+              <ImageUploader 
+                label="صورة الهيرو (الخلفية العلوية لصفحة المدونة)"
+                currentUrl={content.blog.heroImage}
+                onUpload={(url) => handleNestedChange("blog", "heroImage", url)}
+              />
+              {content.blog.heroImage && (
+                <img src={content.blog.heroImage} className="mt-4 h-32 w-full object-cover rounded-lg" alt="Blog Hero" />
+              )}
+            </div>
             <div className="bg-surface-container-lowest p-6 rounded-lg border border-outline-variant">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -413,7 +595,16 @@ export default function AdminContent() {
         {activeTab === "contact" && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
             <h2 className="text-title-lg text-primary font-bold mb-4">إدارة قسم: اتصل بنا (نموذج التواصل)</h2>
-            
+            <div className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant mb-4">
+              <ImageUploader 
+                label="صورة الهيرو (الخلفية العلوية لصفحة اتصل بنا)"
+                currentUrl={content.contact.heroImage}
+                onUpload={(url) => handleNestedChange("contact", "heroImage", url)}
+              />
+              {content.contact.heroImage && (
+                <img src={content.contact.heroImage} className="mt-4 h-32 w-full object-cover rounded-lg" alt="Contact Hero" />
+              )}
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <h3 className="font-bold text-on-surface border-b border-outline-variant pb-2">النصوص الجانبية</h3>
@@ -440,6 +631,67 @@ export default function AdminContent() {
                 <div>
                   <label className="block text-sm font-bold text-on-surface mb-1">نص زر الإرسال</label>
                   <input type="text" value={content.contact.submitBtn} onChange={(e) => handleNestedChange("contact", "submitBtn", e.target.value)} className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 focus:ring-1 focus:ring-primary outline-none" />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* ACCREDITED ENTITIES SECTION */}
+        {activeTab === "accreditedEntities" && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+            <h2 className="text-title-lg text-primary font-bold mb-4">إدارة قسم: الجهات المعتمدة</h2>
+            
+            <div className="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant relative shadow-sm">
+              <div className="mb-6">
+                <label className="block text-sm font-bold text-on-surface mb-1">عنوان القسم</label>
+                <input 
+                  type="text" 
+                  value={content.accreditedEntities.title || "الجهات المعتمدة"} 
+                  onChange={(e) => handleNestedChange("accreditedEntities", "title", e.target.value)} 
+                  className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 focus:ring-1 focus:ring-primary outline-none max-w-md" 
+                />
+              </div>
+
+              <div className="bg-surface-container-high p-4 rounded-xl mb-4">
+                <div className="flex justify-between items-center mb-4">
+                  <div>
+                    <h3 className="text-sm font-bold text-on-surface">شعارات الجهات (اللوجوهات)</h3>
+                    <p className="text-xs text-on-surface-variant mt-1">قم برفع شعارات الجهات المعتمدة لتظهر في شريط متحرك أسفل الموقع</p>
+                  </div>
+                  <ImageUploader 
+                    label="إضافة شعار جديد"
+                    currentUrl=""
+                    onUpload={(url) => {
+                      const newLogos = [...(content.accreditedEntities.logos || [])];
+                      newLogos.push(url);
+                      handleNestedChange("accreditedEntities", "logos", newLogos);
+                    }}
+                  />
+                </div>
+                
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-4">
+                  {content.accreditedEntities.logos && content.accreditedEntities.logos.map((logo: string, lIdx: number) => (
+                    <div key={lIdx} className="relative group bg-white rounded-lg border border-outline-variant p-4 aspect-square flex items-center justify-center">
+                      <img src={logo} className="max-w-full max-h-full object-contain" alt="Accredited Logo" />
+                      <button 
+                        onClick={() => {
+                          const newLogos = [...content.accreditedEntities.logos];
+                          newLogos.splice(lIdx, 1);
+                          handleNestedChange("accreditedEntities", "logos", newLogos);
+                        }}
+                        className="absolute -top-2 -right-2 bg-error text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity shadow-md hover:bg-error/90"
+                        title="حذف الشعار"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">close</span>
+                      </button>
+                    </div>
+                  ))}
+                  {(!content.accreditedEntities.logos || content.accreditedEntities.logos.length === 0) && (
+                    <div className="col-span-full py-8 text-center text-sm text-on-surface-variant italic border-2 border-dashed border-outline-variant rounded-xl">
+                      لا يوجد شعارات مضافة، قم برفع شعارات لعرضها في الشريط المتحرك
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

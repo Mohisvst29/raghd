@@ -1,131 +1,26 @@
-"use client";
+import { connectDB } from "@/lib/mongoose";
+import { Content } from "@/models/Content";
+import BlogContent from "@/components/BlogContent";
 
-import TopNavBar from "@/components/TopNavBar";
-import Footer from "@/components/Footer";
-import { motion } from "framer-motion";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { Post } from "@/models/Post";
 
-export default function Blog() {
-  const { t } = useLanguage();
+export const revalidate = 0;
 
-  return (
-    <>
-      <TopNavBar />
-      {/* Hero Section */}
-      <header className="mt-20 pt-stack-lg pb-stack-lg text-white flex flex-col items-center justify-center text-center px-gutter relative">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "linear-gradient(rgba(0, 22, 41, 0.85), rgba(0, 43, 73, 0.7)), url('https://images.unsplash.com/photo-1524522173746-f628baad3644?auto=format&fit=crop&q=80&w=2000')" }}></div>
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="max-w-4xl relative z-10"
-        >
-          <h1 className="font-display-xl text-display-xl mb-4">{t.blogPage.heroTitle}</h1>
-          <p className="font-body-lg text-body-lg text-white/90">{t.blogPage.heroDesc}</p>
-        </motion.div>
-      </header>
+export default async function Blog() {
+  let siteContent = null;
+  let posts = [];
+  
+  try {
+    await connectDB();
+    const dbContent = await Content.findOne();
+    if (dbContent) {
+      siteContent = JSON.parse(JSON.stringify(dbContent));
+    }
+    const dbPosts = await Post.find({ status: "منشور" }).sort({ createdAt: -1 });
+    posts = JSON.parse(JSON.stringify(dbPosts));
+  } catch (error) {
+    console.error("Failed to fetch content server-side:", error);
+  }
 
-      <main className="max-w-container-max mx-auto px-gutter py-stack-lg">
-        {/* Featured Post Section */}
-        <section className="mb-stack-lg">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="grid grid-cols-1 lg:grid-cols-12 bg-white rounded-xl overflow-hidden border border-outline-variant shadow-sm"
-          >
-            <div className="lg:col-span-7 relative h-64 lg:h-full min-h-[400px]">
-              <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDG2GvaI9CpzxniJjxeuY7a8K10-YOr0EP6cXyiLOB3jP5WK649S_mYRpz_8EHFV35HExThkGLXmG7ZpYuifu1snpRUsoEgGB2LiRIAUp2T3Ny9a-EuPRvHer7mRilouc9eDolHMbM3-PpOH9wrYKreBBvSalKZqf2E2cDjin-oni7fdPRms1twzgPILu2nqRW-m1plzHSbFmCK-jwgc5bgNEQKdO2U6c9hFaBN9NSwFY0NAxiCNwHPF5tula26T24bXNW0Zi7HeOCA')" }}></div>
-            </div>
-            <div className="lg:col-span-5 p-margin flex flex-col justify-center bg-surface-container-low">
-              <span className="inline-block px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed rounded-full font-label-sm text-label-sm mb-4 w-fit">{t.blogPage.featuredBadge}</span>
-              <h2 className="font-headline-lg text-headline-lg text-primary mb-4 leading-tight">{t.blogPage.featuredTitle}</h2>
-              <p className="font-body-md text-body-md text-on-surface-variant mb-6">{t.blogPage.featuredDesc}</p>
-              <div className="flex items-center justify-between mt-auto">
-                <span className="font-label-sm text-label-sm text-outline flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[18px]">calendar_today</span>
-                  15 أكتوبر 2024
-                </span>
-                <a className="text-primary font-bold hover:underline flex items-center gap-1" href="#">
-                  {t.blogPage.readMore}
-                  <span className="material-symbols-outlined">arrow_back</span>
-                </a>
-              </div>
-            </div>
-          </motion.div>
-        </section>
-
-        {/* Category Filters */}
-        <div className="flex flex-wrap gap-4 mb-stack-md border-b border-outline-variant pb-stack-sm overflow-x-auto">
-          {t.blogPage.filters.map((filter, i) => (
-            <button 
-              key={i}
-              className={`px-6 py-2 rounded-full font-label-sm transition-colors ${i === 0 ? 'bg-primary text-white hover:opacity-90' : 'bg-white text-on-surface border border-outline-variant hover:bg-surface-container-high'}`}
-            >
-              {filter}
-            </button>
-          ))}
-        </div>
-
-        {/* Blog Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
-          {[
-            { tag: "أخبار الموانئ", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDNfm5R81b00JsAwWzL4ufU7VSVcr5xsjqqoa3mylJvKPJW1iQbnpcRYK_F3Tsg4boo9QHVVz7Q1ds0CdCZPevBxTToC1ghSNTuF4k2shTr9iHu9KO247_zHA9FAoj_fS4MvnIzbVGVJU28I0aq5EkdHvOyTfPvQ91dsts5A-FcNRtrpD90V8A3X4s7QkTV7iA-ZZpfigLsaiirPjA--W_STKSnULCpnXoLk3oiMmu6ufDYw_QRMogbd3y-rsfsz341TIW66aduadzD", date: "12 أكتوبر 2024", title: "تطورات الأنظمة الجمركية في المملكة 2024", desc: "نظرة معمقة على التحديثات الأخيرة في نظام الجمارك الموحد لدول مجلس التعاون الخليجي وكيفية الامتثال لها." },
-            { tag: "خدمات لوجستية", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCKnlRdqFUWupw70lQdK6bhFcTjdLEflirpVJx4blpAmRyXV4gTyWxxrf7RQbPWdP3ovQZkFVcvxDPlZyIj3PNym_NsKwkojUpMbeeyCfPejWTiZH4mqOJYpJZngVE33G60v0c3QzUhAbk6WXYMULIOL3_EXXizOvR5eku1VutooxnX1puQ_Z59kmXVkVT8C3jWKRBTwbfypWGa5E9POaOHD3exYjA9An427GqGl5gjGM3kYlv5ncew1ioOhom-9hYDGsytm_BlU7B0", date: "08 أكتوبر 2024", title: "إدارة سلاسل الإمداد في الأوقات الحرجة", desc: "كيف يمكن للمستوردين تقليل المخاطر في سلاسل الإمداد العالمية وضمان وصول الشحنات في موعدها المحدد." },
-            { tag: "تخليص جمركي", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAiouUnv9cYKcCHjzOHRbetLAhHEV7d0bLqyu8Yos3sPDRNAPfPcW1cXgh74rY_6T0mbBT-XF6RAT3-KKIJROEeWvIoMJJahkD4uk9n4cU-gZmAg6pxlAGx6lsXFZlrJb35d0Skb3U-qVJQsOW_XKxHIUtrkh0SEKgRBrD1BLVnJI6S587gJcRvhGff1zN_pNkIoS7fR0jGIzbCl1DzGvBSR5POzofPbBfBntGn7LZPu8wz-5qGgfAYbuiX8Y5ueuJw19l7NvRRnfy7", date: "03 أكتوبر 2024", title: "دليل المستورد المبتدئ للسوق السعودي", desc: "خطوات مبسطة لكل من يرغب في بدء نشاط الاستيراد في المملكة العربية السعودية، من الوثائق المطلوبة حتى استلام البضاعة." }
-          ].map((post, idx) => (
-            <motion.article 
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              whileHover={{ y: -5 }}
-              className="bg-white border border-outline-variant rounded-lg overflow-hidden flex flex-col group hover:shadow-lg transition-all duration-300"
-            >
-              <div className="h-56 overflow-hidden relative">
-                <img alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src={post.img} />
-                <div className="absolute top-4 right-4 bg-primary text-white text-[12px] px-3 py-1 rounded font-bold">{post.tag}</div>
-              </div>
-              <div className="p-stack-sm flex flex-col flex-grow">
-                <div className="flex items-center gap-2 text-outline mb-2 font-code-xs">
-                  <span className="material-symbols-outlined text-[16px]">schedule</span>
-                  {post.date}
-                </div>
-                <h3 className="font-headline-md text-headline-md text-primary mb-3 leading-snug">{post.title}</h3>
-                <p className="font-body-md text-body-md text-on-surface-variant line-clamp-3 mb-6">{post.desc}</p>
-                <a className="mt-auto flex items-center justify-between text-primary font-bold group-hover:text-tertiary transition-colors" href="#">
-                  <span>{t.blogPage.readMore}</span>
-                  <span className="material-symbols-outlined transform group-hover:-translate-x-1 transition-transform">arrow_back</span>
-                </a>
-              </div>
-            </motion.article>
-          ))}
-        </div>
-
-        {/* Newsletter Subscription */}
-        <section className="mt-stack-lg bg-primary-container rounded-2xl p-margin text-center overflow-hidden relative">
-          <div className="relative z-10">
-            <h2 className="font-headline-lg text-headline-lg text-white mb-4">{t.blogPage.newsletterTitle}</h2>
-            <p className="font-body-md text-body-md text-white/80 mb-stack-md max-w-2xl mx-auto">{t.blogPage.newsletterDesc}</p>
-            <form className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
-              <input className="flex-grow px-gutter py-3 rounded-lg border-none focus:ring-2 focus:ring-tertiary-fixed text-on-surface font-body-md" placeholder={t.blogPage.newsletterPlaceholder} type="email" />
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-tertiary-fixed text-on-tertiary-fixed font-bold px-stack-md py-3 rounded-lg hover:bg-tertiary transition-colors" 
-                type="button"
-              >
-                {t.blogPage.newsletterSubmit}
-              </motion.button>
-            </form>
-          </div>
-          {/* Decorative background elements */}
-          <div className="absolute -top-12 -left-12 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-12 -right-12 w-64 h-64 bg-tertiary-container/10 rounded-full blur-3xl"></div>
-        </section>
-      </main>
-      <Footer />
-    </>
-  );
+  return <BlogContent siteContent={siteContent} posts={posts} />;
 }

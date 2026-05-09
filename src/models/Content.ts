@@ -11,6 +11,7 @@ const ContentSchema = new mongoose.Schema({
     ]
   },
   about: {
+    heroImage: { type: String },
     title: { type: String },
     description: { type: String },
     visionTitle: { type: String },
@@ -20,17 +21,29 @@ const ContentSchema = new mongoose.Schema({
     image: { type: String },
   },
   services: {
+    heroImage: { type: String },
     title: { type: String },
     subtitle: { type: String },
     items: [
       {
         icon: { type: String },
+        image: { type: String }, // Legacy
+        main_image: { type: String },
         title: { type: String },
-        features: { type: String }, // Comma separated string
+        slug: { type: String },
+        short_description: { type: String },
+        features: { type: String }, // Legacy
+        sub_services: [{ type: String }],
+        logos: [{ type: String }],
+        button_text: { type: String },
+        button_link: { type: String },
+        status: { type: Boolean, default: true },
+        order: { type: Number, default: 0 },
       }
     ]
   },
   whyUs: {
+    heroImage: { type: String },
     title: { type: String },
     features: [
       {
@@ -41,16 +54,23 @@ const ContentSchema = new mongoose.Schema({
     ]
   },
   blog: {
+    heroImage: { type: String },
     title: { type: String },
     subtitle: { type: String },
   },
   contact: {
+    heroImage: { type: String },
     title: { type: String },
     description: { type: String },
     serviceLabel: { type: String },
     serviceOptions: { type: String }, // Comma separated string
     submitBtn: { type: String },
+  },
+  accreditedEntities: {
+    title: { type: String },
+    logos: [{ type: String }],
   }
-}, { timestamps: true });
+}, { timestamps: true, strict: false });
 
-export const Content = mongoose.models.Content || mongoose.model("Content", ContentSchema);
+delete mongoose.models.Content;
+export const Content = mongoose.model("Content", ContentSchema);

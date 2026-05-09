@@ -26,16 +26,10 @@ const defaultContent = {
     title: "خدماتنا المتكاملة",
     subtitle: "حلول لوجستية شاملة مصممة لتلبية احتياجات أعمالكم",
     items: [
-      {
-        icon: "account_balance",
-        title: "التخليص الجمركي",
-        features: "التخليص للوارد, التخليص للصادر, خدمات الترانزيت"
-      },
-      {
-        icon: "analytics",
-        title: "الخدمات الاستشارية",
-        features: "تحديد HS Code, حساب الرسوم الجمركية, مراجعة المستندات"
-      }
+      { title: "التخليص الجمركي", short_description: "تخليص الواردات والصادرات وتتبعها بدقة متناهية.", button_text: "اطلب الخدمة الآن", sub_services: ["تخليص واردات", "تخليص صادرات", "ترانزيت"], status: true, order: 1 },
+      { title: "الخدمات الاستشارية", short_description: "استشارات جمركية ولوجستية احترافية لتطوير أعمالك.", button_text: "طلب استشارة", sub_services: ["التصنيف الجمركي", "الإعفاءات", "لوائح فسح"], status: true, order: 2 },
+      { title: "متابعة الشحنات", short_description: "نظام تتبع لحظي لشحناتك من الانطلاق حتى الوصول.", button_text: "تتبع شحنتك", sub_services: ["تتبع حاويات", "إشعارات يومية", "تقارير مفصلة"], status: true, order: 3 },
+      { title: "الخدمات الإضافية", short_description: "خدمات شحن مستودعات وتأمين متكاملة.", button_text: "المزيد", sub_services: ["التخزين", "النقل البري", "التأمين المائي"], status: true, order: 4 },
     ]
   },
   whyUs: {
@@ -57,6 +51,10 @@ const defaultContent = {
     serviceLabel: "نوع الخدمة المطلوب",
     serviceOptions: "تخليص جمركي, استشارات, نقل وتخزين, أخرى",
     submitBtn: "إرسال الطلب"
+  },
+  accreditedEntities: {
+    title: "الجهات المعتمدة",
+    logos: []
   }
 };
 
@@ -82,15 +80,7 @@ export async function POST(req: Request) {
     await connectDB();
     const body = await req.json();
     
-    let content = await Content.findOne();
-    if (content) {
-      // Update existing
-      Object.assign(content, body);
-      await content.save();
-    } else {
-      // Create new
-      content = await Content.create(body);
-    }
+    const content = await Content.findOneAndUpdate({}, body, { new: true, upsert: true, strict: false });
     
     return NextResponse.json({ success: true, message: "تم الحفظ بنجاح", data: content });
   } catch (error) {

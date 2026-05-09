@@ -42,10 +42,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </Link>
           
           <div className="pt-4 pb-2 px-3 text-label-sm text-outline uppercase tracking-wider">{t.admin.sidebar.operations}</div>
-          <Link href="/admin/services" className={`flex items-center gap-3 px-3 py-2 rounded transition-colors ${pathname === '/admin/services' ? 'bg-secondary-container text-on-secondary-container font-semibold' : 'hover:bg-surface-container-high text-on-surface-variant'}`}>
-            <span className="material-symbols-outlined">anchor</span>
-            <span>{t.admin.sidebar.services}</span>
-          </Link>
           <Link href="/admin/inquiries" className={`flex items-center gap-3 px-3 py-2 rounded transition-colors ${pathname === '/admin/inquiries' ? 'bg-secondary-container text-on-secondary-container font-semibold' : 'hover:bg-surface-container-high text-on-surface-variant'}`}>
             <span className="material-symbols-outlined">mail</span>
             <span>{t.admin.sidebar.inquiries}</span>

@@ -5,8 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface Slide {
   title: string;
-  desc: string;
-  cta: string;
+  desc?: string;
+  description?: string;
+  cta?: string;
+  buttonText?: string;
   image: string;
 }
 
@@ -21,7 +23,7 @@ export default function HeroSlider({ slides }: { slides: Slide[] }) {
   }, [slides.length]);
 
   return (
-    <section className="relative h-[870px] w-full flex items-center justify-center overflow-hidden bg-surface-container-highest">
+    <section className="relative h-[600px] md:h-[700px] w-full flex items-center justify-center overflow-hidden bg-surface-container-highest">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlide}
@@ -50,18 +52,20 @@ export default function HeroSlider({ slides }: { slides: Slide[] }) {
             transition={{ duration: 0.8 }}
             className="max-w-3xl space-y-stack-sm"
           >
-            <h1 className="font-display-xl text-display-xl text-white">{slides[currentSlide].title}</h1>
-            <p className="font-body-lg text-body-lg text-secondary-fixed opacity-90 leading-relaxed">
-              {slides[currentSlide].desc}
+            <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">{slides[currentSlide].title}</h1>
+            <p className="font-body-lg text-lg text-secondary-fixed opacity-90 leading-relaxed mt-4">
+              {slides[currentSlide].description || slides[currentSlide].desc}
             </p>
-            <div className="pt-stack-sm">
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-tertiary-container text-on-tertiary-container px-8 py-4 rounded-lg font-headline-md hover:bg-tertiary transition-colors duration-300 shadow-lg"
-              >
-                {slides[currentSlide].cta}
-              </motion.button>
+            <div className="pt-8">
+              <a href="/contact" className="inline-block">
+                <motion.button 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-primary text-white px-8 py-4 rounded-xl font-bold hover:bg-primary/90 transition-colors duration-300 shadow-xl border border-white/20"
+                >
+                  {slides[currentSlide].buttonText || slides[currentSlide].cta || "تواصل معنا"}
+                </motion.button>
+              </a>
             </div>
           </motion.div>
         </AnimatePresence>
