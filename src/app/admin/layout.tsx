@@ -4,25 +4,41 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useState } from "react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { t } = useLanguage();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   if (pathname === '/admin/login') {
     return <>{children}</>;
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background text-on-background">
+    <div className="flex h-screen overflow-hidden bg-background text-on-background relative">
+      {/* Mobile Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar Navigation */}
-      <aside className="w-72 bg-surface-container-low border-l border-outline-variant flex flex-col">
-        <div className="p-6 flex items-center gap-3 border-b border-outline-variant">
-          <div className="size-10 bg-primary-container text-white flex items-center justify-center rounded">
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-              <path clipRule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor" fillRule="evenodd"></path>
-            </svg>
+      <aside className={`fixed lg:static top-0 right-0 h-full w-72 bg-surface-container-low border-l border-outline-variant flex flex-col z-50 transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}`}>
+        <div className="p-6 flex items-center justify-between gap-3 border-b border-outline-variant">
+          <div className="flex items-center gap-3">
+            <div className="size-10 bg-primary-container text-white flex items-center justify-center rounded">
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <path clipRule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor" fillRule="evenodd"></path>
+              </svg>
+            </div>
+            <span className="text-headline-md text-primary font-bold">{t.admin.sidebar.brand}</span>
           </div>
-          <span className="text-headline-md text-primary font-bold">{t.admin.sidebar.brand}</span>
+          <button className="lg:hidden text-outline" onClick={() => setIsSidebarOpen(false)}>
+            <span className="material-symbols-outlined">close</span>
+          </button>
         </div>
         
         <nav className="flex-1 overflow-y-auto p-4 space-y-2">
@@ -60,9 +76,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0 bg-background">
         {/* Top Bar */}
-        <header className="h-20 bg-surface border-b border-outline-variant flex items-center justify-between px-8 shrink-0">
-          <div className="flex items-center gap-4 w-1/3">
-            <div className="relative w-full max-w-md">
+        <header className="h-20 bg-surface border-b border-outline-variant flex items-center justify-between px-4 lg:px-8 shrink-0">
+          <div className="flex items-center gap-4 w-1/2 lg:w-1/3">
+            <button className="lg:hidden text-on-surface p-2" onClick={() => setIsSidebarOpen(true)}>
+              <span className="material-symbols-outlined">menu</span>
+            </button>
+            <div className="relative w-full max-w-md hidden sm:block">
               <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline">search</span>
               <input className="w-full bg-surface-container-low border border-outline-variant rounded-lg pr-10 pl-4 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none" placeholder={t.admin.topbar.search} type="text"/>
             </div>
@@ -84,7 +103,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </header>
 
         {/* Dashboard Body */}
-        <div className="flex-1 overflow-y-auto p-8 space-y-8 relative">
+        <div className="flex-1 overflow-y-auto p-4 lg:p-8 space-y-8 relative">
           {children}
         </div>
       </main>

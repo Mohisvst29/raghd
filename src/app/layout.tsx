@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import FloatingContact from "@/components/FloatingContact";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import PageTransition from "@/components/PageTransition";
@@ -34,7 +34,7 @@ export default function RootLayout({
             <PageTransition>
               {children}
             </PageTransition>
-            <FloatingWhatsApp />
+            <FloatingContact />
           </LanguageProvider>
         </ThemeProvider>
       </body>

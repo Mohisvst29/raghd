@@ -117,6 +117,13 @@ export default function AdminBlog() {
             <textarea value={currentPost.content} onChange={(e) => setCurrentPost({...currentPost, content: e.target.value})} className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 outline-none focus:ring-1 focus:ring-primary h-64"></textarea>
           </div>
           <div>
+            <label className="block text-sm font-bold text-on-surface mb-1">حالة المقال</label>
+            <select value={currentPost.status} onChange={(e) => setCurrentPost({...currentPost, status: e.target.value})} className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 outline-none focus:ring-1 focus:ring-primary">
+              <option value="مسودة">مسودة (لا يظهر للزوار)</option>
+              <option value="منشور">منشور (يظهر في الموقع)</option>
+            </select>
+          </div>
+          <div>
             <ImageUploader 
               label="صورة المقال"
               currentUrl={currentPost.image}
