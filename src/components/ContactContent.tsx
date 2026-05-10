@@ -15,7 +15,7 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone || !formData.message) {
-      alert(lang === 'ar' ? "يرجى تعبئة جميع الحقول المطلوبة" : "Please fill all required fields");
+      alert(t.common.fillRequired);
       return;
     }
     setIsSubmitting(true);
@@ -26,11 +26,11 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
         body: JSON.stringify(formData),
       });
       if (res.ok) {
-        alert(lang === 'ar' ? "تم إرسال رسالتك بنجاح!" : "Your message has been sent successfully!");
+        alert(t.common.sendSuccess);
         setFormData({ name: "", phone: "", service: "", message: "" });
       }
     } catch (err) {
-      alert(lang === 'ar' ? "حدث خطأ أثناء الإرسال" : "Failed to send message");
+      alert(t.common.sendError);
     } finally {
       setIsSubmitting(false);
     }
@@ -54,7 +54,7 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
         <section className="relative h-64 md:h-72 flex items-center justify-center overflow-hidden">
           <img
             src={contact?.heroImage || "https://images.unsplash.com/photo-1586528116311-ad8ed7c83a7f?q=80&w=2070&auto=format&fit=crop"}
-            alt="Contact Hero"
+            alt={p.heroTitle}
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/70 to-primary/90" />
@@ -101,7 +101,7 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                 </div>
                 <div className="text-right">
                   <p className="text-xs font-bold text-secondary uppercase tracking-wider">{p.infoLocation}</p>
-                  {((contact?.locations && Array.isArray(contact.locations) && contact.locations.filter(Boolean).length > 0) ? contact.locations.filter(Boolean) : [lang === 'ar' ? "ميناء جدة الإسلامي، مبنى الخدمات اللوجستية" : "Jeddah Islamic Port, Logistics Building"]).map((loc: string, i: number) => (
+                  {((contact?.locations && Array.isArray(contact.locations) && contact.locations.filter(Boolean).length > 0) ? contact.locations.filter(Boolean) : [t.contactPage.infoLocationDefault]).map((loc: string, i: number) => (
                     <p key={i} className="text-primary font-bold mt-1">{loc}</p>
                   ))}
                 </div>
@@ -119,7 +119,7 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                 <div className="relative rounded-2xl overflow-hidden shadow-md">
                   <img
                     src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?q=80&w=800&auto=format&fit=crop"
-                    alt="Jeddah Islamic Port"
+                    alt={p.mapLabel}
                     className="w-full h-72 object-cover grayscale"
                   />
                   <div className="absolute bottom-4 right-4 bg-primary-container text-white text-xs font-bold px-4 py-2 rounded-lg flex items-center gap-2">
@@ -182,7 +182,7 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                       rows={4}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      placeholder={lang === 'ar' ? "اكتب تفاصيل طلبك هنا..." : "Write your request details here..."}
+                      placeholder={t.common.writeRequestDetails}
                       className="w-full border border-outline-variant rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-primary bg-surface resize-none"
                     />
                   </div>
@@ -194,7 +194,7 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                     disabled={isSubmitting}
                     className="w-full bg-primary text-white py-4 rounded-lg font-bold text-lg hover:shadow-lg transition-all disabled:opacity-50"
                   >
-                    {isSubmitting ? "جاري الإرسال..." : (contact?.submitBtn || (lang === 'ar' ? "إرسال الرسالة" : "Send Message"))}
+                    {isSubmitting ? t.common.submitting : (contact?.submitBtn || t.common.sendMessage)}
                   </motion.button>
                 </form>
               </div>

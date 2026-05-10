@@ -20,7 +20,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone || !formData.message) {
-      alert(lang === 'ar' ? "يرجى تعبئة جميع الحقول المطلوبة" : "Please fill all required fields");
+      alert(t.common.fillRequired);
       return;
     }
     setIsSubmitting(true);
@@ -31,11 +31,11 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
         body: JSON.stringify(formData),
       });
       if (res.ok) {
-        alert(lang === 'ar' ? "تم إرسال رسالتك بنجاح!" : "Your message has been sent successfully!");
+        alert(t.common.sendSuccess);
         setFormData({ name: "", phone: "", service: "", message: "" });
       }
     } catch (err) {
-      alert(lang === 'ar' ? "حدث خطأ أثناء الإرسال" : "Failed to send message");
+      alert(t.common.sendError);
     } finally {
       setIsSubmitting(false);
     }
@@ -78,7 +78,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
             >
               <div className="flex items-center gap-2 text-primary font-bold">
                 <span className="w-8 h-1 bg-primary"></span>
-                <span className="text-label-sm uppercase tracking-wider">{lang === 'ar' ? 'من نحن' : 'About Us'}</span>
+                <span className="text-label-sm uppercase tracking-wider">{t.home.about.title}</span>
               </div>
               <h2 className="font-headline-lg text-headline-lg text-primary">{about.title || about.heading}</h2>
               <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed whitespace-pre-line">
@@ -105,7 +105,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
               className="relative"
             >
               <img 
-                alt="About Raghad Ports" 
+                alt={t.common.aboutImageAlt} 
                 className="rounded-2xl shadow-2xl w-full h-[450px] object-cover" 
                 src={about.image || "https://lh3.googleusercontent.com/aida-public/AB6AXuCogNq19PXsuSh1TARASmOKuHGGlWYEPJi-ZlhXqP0SD3rkKdsL-eRm_ggr6yKri8pU4zSZ03ER-YyqK86ueXu6GS2qzAaLFq6MZd8tdWjGUGviA3UbmGUu_CGqtzaGl5WHRj8iTvsrhylAIuBOerilc9XPKCmvIbpTUjiG_d9_6UFRYowAPLN265xA-qqQiHx7z-Lg0vY-VatrMBUYHMEusn6jkUSUwKfvIbwEVgpUlsKgKKi7sQOjNSl-cmrwuPjZnOC6OUYDsHRg"}
               />
@@ -152,7 +152,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                   
                   <div className="p-8 flex-1 flex flex-col">
                     <div className="mb-6 flex-1">
-                      <h4 className="text-sm font-bold text-secondary uppercase tracking-widest mb-4">{lang === 'ar' ? 'الخدمات المشمولة' : 'Included Services'}</h4>
+                      <h4 className="text-sm font-bold text-secondary uppercase tracking-widest mb-4">{t.common.includedServices}</h4>
                       <div className="flex flex-wrap gap-2">
                         {(service.sub_services?.length > 0 ? service.sub_services : service.features?.split(","))?.map((item: string, i: number) => item.trim() && (
                           <span key={i} className="inline-flex items-center bg-surface-container text-on-surface-variant text-sm px-3 py-1.5 rounded-full border border-outline-variant">
@@ -165,11 +165,11 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
 
                     {service.logos && service.logos.length > 0 && (
                       <div className="mb-8 pt-6 border-t border-outline-variant">
-                        <h4 className="text-xs font-bold text-on-surface-variant mb-4">{lang === 'ar' ? 'الجهات المرتبطة' : 'Associated Entities'}</h4>
+                        <h4 className="text-xs font-bold text-on-surface-variant mb-4">{t.common.associatedEntities}</h4>
                         <div className="flex gap-4 flex-wrap items-center">
                           {service.logos.map((logo: string, lIdx: number) => (
                             <div key={lIdx} className="bg-surface-container-lowest p-2 rounded-xl border border-outline-variant hover:border-primary/30 hover:shadow-sm transition-all">
-                              <img src={logo} alt="Partner Logo" className="h-10 w-auto object-contain mix-blend-multiply" />
+                              <img src={logo} alt={t.common.partnerLogoAlt} className="h-10 w-auto object-contain mix-blend-multiply" />
                             </div>
                           ))}
                         </div>
@@ -178,7 +178,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
 
                     <div className="mt-auto">
                       <a href={service.button_link || "/contact"} className="flex items-center justify-center gap-2 w-full bg-surface-container text-primary font-bold py-4 rounded-xl border border-outline-variant hover:bg-primary hover:text-white transition-all duration-300 group/btn">
-                        {service.button_text || (lang === 'ar' ? "اطلب الخدمة الآن" : "Order Service Now")}
+                        {service.button_text || t.common.orderServiceNow}
                         <span className="material-symbols-outlined text-[20px] transform group-hover/btn:-translate-x-1 transition-transform">arrow_back</span>
                       </a>
                     </div>
@@ -186,7 +186,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                 </motion.div>
               ))
             ) : (
-              <div className="col-span-full text-center text-on-surface-variant py-20">{lang === 'ar' ? 'لا توجد خدمات مضافة حالياً.' : 'No services added yet.'}</div>
+              <div className="col-span-full text-center text-on-surface-variant py-20">{t.common.noServicesYet}</div>
             )}
           </div>
         </div>
@@ -196,16 +196,16 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
       {accreditedEntities && accreditedEntities.logos && accreditedEntities.logos.length > 0 && (
         <section className="py-12 bg-white border-y border-outline-variant overflow-hidden">
           <div className="max-w-[1280px] mx-auto px-margin mb-8 text-center">
-            <h3 className="text-xl font-bold text-on-surface-variant uppercase tracking-widest">{accreditedEntities.title || (lang === 'ar' ? "الجهات المعتمدة" : "Accredited Entities")}</h3>
+            <h3 className="text-xl font-bold text-on-surface-variant uppercase tracking-widest">{accreditedEntities.title || t.common.accreditedEntities}</h3>
           </div>
           <div className="relative w-full flex overflow-x-hidden">
             <div className="flex gap-16 items-center px-8 animate-marquee whitespace-nowrap">
               {accreditedEntities.logos.map((logo: string, idx: number) => (
-                <img key={idx} src={logo} alt="Accredited Logo" className="h-16 md:h-20 w-auto object-contain grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300" />
+                <img key={idx} src={logo} alt={t.common.accreditedLogoAlt} className="h-16 md:h-20 w-auto object-contain grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300" />
               ))}
               {/* Duplicate for infinite effect */}
               {accreditedEntities.logos.map((logo: string, idx: number) => (
-                <img key={`dup-${idx}`} src={logo} alt="Accredited Logo" className="h-16 md:h-20 w-auto object-contain grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300" />
+                <img key={`dup-${idx}`} src={logo} alt={t.common.accreditedLogoAlt} className="h-16 md:h-20 w-auto object-contain grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300" />
               ))}
             </div>
           </div>
@@ -282,7 +282,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                       <span className="material-symbols-outlined text-primary">call</span>
                     </div>
                     <div>
-                      <p className="text-label-sm text-secondary">{t.home.contact.callUs || "Call Us"}</p>
+                      <p className="text-label-sm text-secondary">{t.home.contact.callUs}</p>
                       {((contact?.phones && Array.isArray(contact.phones) && contact.phones.filter(Boolean).length > 0) ? contact.phones.filter(Boolean) : ["0506468204", "0568094648"]).map((phone: string, i: number) => (
                         <p key={i} className="text-body-md font-bold text-primary" dir="ltr">{phone}</p>
                       ))}
@@ -294,7 +294,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                       <span className="material-symbols-outlined text-primary">mail</span>
                     </div>
                     <div>
-                      <p className="text-label-sm text-secondary">{t.home.contact.emailUs || "Email Us"}</p>
+                      <p className="text-label-sm text-secondary">{t.home.contact.emailUs}</p>
                       {((contact?.emails && Array.isArray(contact.emails) && contact.emails.filter(Boolean).length > 0) ? contact.emails.filter(Boolean) : ["ceo@raghadports.com"]).map((email: string, i: number) => (
                         <p key={i} className="text-body-md font-bold text-primary">{email}</p>
                       ))}
@@ -306,8 +306,8 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                       <span className="material-symbols-outlined text-primary">location_on</span>
                     </div>
                     <div>
-                      <p className="text-label-sm text-secondary">{t.home.contact.location || "Location"}</p>
-                      {((contact?.locations && Array.isArray(contact.locations) && contact.locations.filter(Boolean).length > 0) ? contact.locations.filter(Boolean) : [t.home.contact.locationDesc || "Jeddah Islamic Port"]).map((loc: string, i: number) => (
+                      <p className="text-label-sm text-secondary">{t.home.contact.location}</p>
+                      {((contact?.locations && Array.isArray(contact.locations) && contact.locations.filter(Boolean).length > 0) ? contact.locations.filter(Boolean) : [t.home.contact.locationDesc]).map((loc: string, i: number) => (
                         <p key={i} className="text-body-md font-bold text-primary">{loc}</p>
                       ))}
                     </div>
@@ -352,7 +352,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                   disabled={isSubmitting}
                   className="w-full bg-primary text-white py-4 rounded-lg font-bold hover:bg-primary-container transition-all shadow-md disabled:opacity-50"
                 >
-                  {isSubmitting ? "جاري الإرسال..." : (contact.submitBtn || contact.submit)}
+                  {isSubmitting ? t.common.submitting : (contact.submitBtn || contact.submit)}
                 </motion.button>
               </form>
             </div>

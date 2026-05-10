@@ -10,10 +10,8 @@ export default function BlogPostContent({ post }: { post: any }) {
     title: post.en.title || post.title,
     content: post.en.content || post.content,
     category: post.en.category || post.category,
-    viewsLabel: "Views",
   } : {
     ...post,
-    viewsLabel: "المشاهدات"
   };
 
   return (
@@ -31,7 +29,7 @@ export default function BlogPostContent({ post }: { post: any }) {
         </span>
         <span className="flex items-center gap-1">
           <span className="material-symbols-outlined text-[18px]">visibility</span>
-          {currentPost.viewsLabel}: {currentPost.views + 1}
+          {t.common.views}: {currentPost.views + 1}
         </span>
       </div>
       <h1 className="font-display-md text-display-md text-primary mb-6">{currentPost.title}</h1>

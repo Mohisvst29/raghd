@@ -84,4 +84,7 @@
     background-color: var(--color-background);
     color: var(--color-on-background);
   }
+  body.font-sans {
+    font-family: "Public Sans", "Noto Kufi Arabic", sans-serif;
+  }
 }

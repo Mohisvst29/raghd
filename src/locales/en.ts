@@ -22,6 +22,30 @@ export const en: typeof ar = {
     contactUs: "Contact Us",
     copyright: "© 2024 Raghad Ports Customs Clearance. All rights reserved. Customs License No. 1234."
   },
+  common: {
+    submitting: "Submitting...",
+    fillRequired: "Please fill all required fields",
+    sendSuccess: "Your message has been sent successfully!",
+    sendError: "Failed to send message",
+    orderServiceNow: "Order Service Now",
+    includedServices: "Included Services",
+    associatedEntities: "Associated Entities",
+    accreditedEntities: "Accredited Entities",
+    noServicesYet: "No services added yet.",
+    yearsOfExperience: "Years of Experience",
+    sendMessage: "Send Message",
+    writeRequestDetails: "Write your request details here...",
+    views: "Views",
+    contactUs: "Contact Us",
+    callUs: "Call Us",
+    whatsappUs: "Contact us via WhatsApp",
+    logoAlt: "Raghadports Logo",
+    aboutImageAlt: "About Raghad Ports",
+    heroBackgroundAlt: "Hero Background",
+    partnerLogoAlt: "Partner Logo",
+    accreditedLogoAlt: "Accredited Logo",
+    search: "Search..."
+  },
   home: {
     heroSlides: [
       {
@@ -45,12 +69,13 @@ export const en: typeof ar = {
     ],
     about: {
       title: "About Us",
-      heading: "Expertise and Leadership in Customs Services",
+      heading: "Deep Expertise in the Heart of Jeddah Islamic Port",
       desc: "At Raghad Ports, we specialize in logistics and all types of customs clearance. We have extensive experience over the years dealing with various types of shipments and goods, allowing us to build a strong reputation as a strategic partner for our clients at Jeddah Islamic Port.",
       visionTitle: "Our Vision",
       visionDesc: "To be the first choice in the Kingdom for customs clearance through innovation and speed.",
       missionTitle: "Our Mission",
-      missionDesc: "To provide integrated services that ensure customer comfort and full compliance with Saudi customs regulations."
+      missionDesc: "To provide integrated services that ensure customer comfort and full compliance with Saudi customs regulations.",
+      identity: "Identity"
     },
     services: {
       title: "Our Integrated Services",
@@ -93,22 +118,42 @@ export const en: typeof ar = {
       submit: "Submit Request"
     }
   },
+  aboutPage: {
+    strategicGoals: "Strategic Goals",
+    goals: [
+      { icon: "trending_up", title: "Sustainable Growth", desc: "Enhancing our commercial presence in the Kingdom and abroad." },
+      { icon: "diversity_3", title: "Empowering Talent", desc: "Investing in human resources and developing their capabilities." },
+      { icon: "precision_manufacturing", title: "Digital Transformation", desc: "Adopting digital technologies to raise operational efficiency." },
+      { icon: "verified", title: "Global Quality", desc: "Obtaining international recognition certificates." }
+    ],
+    values: ["Integrity", "Professionalism", "Innovation", "Commitment"]
+  },
   admin: {
     sidebar: {
       brand: "Raghad Ports",
       dashboard: "Dashboard",
-      content: "Content Management",
+      content: "Content",
+      editContent: "Edit Site Content",
       backToSite: "Back to Main Site",
-      blog: "Blog Management",
+      blog: "Blog",
       operations: "Operations",
       services: "Service Management",
-      inquiries: "Contact Inquiries",
+      inquiries: "Inquiries",
       settings: "Settings"
     },
     topbar: {
-      search: "Search for shipment, client, or article...",
-      adminName: "Ahmed Al-Amri",
+      search: "Search...",
+      adminName: "General Manager",
       role: "System Administrator"
+    },
+    login: {
+      title: "Login",
+      subtitle: "Welcome to Raghad Ports Control Panel",
+      username: "Username",
+      password: "Password",
+      submit: "Login to Control Panel",
+      errorCredentials: "Invalid username or password",
+      errorServer: "Server connection error"
     },
     dashboard: {
       title: "Overview",
@@ -138,6 +183,7 @@ export const en: typeof ar = {
     infoPhones: "Contact Numbers",
     infoEmail: "Email Address",
     infoLocation: "Location",
+    infoLocationDefault: "Jeddah Islamic Port, Logistics Building",
     formTitle: "Send us your inquiry",
     formServiceOptions: ["Customs Clearance", "Customs Consulting", "Transport & Logistics", "Document Management"],
     mapLabel: "Company Headquarters",
@@ -216,5 +262,9 @@ export const en: typeof ar = {
     ctaDesc: "Join our list of distinguished clients and enjoy professional services tailored to your business. Our first consultation is always free and geared towards your success.",
     ctaBtn1: "Contact Us Now",
     ctaBtn2: "Browse Our Services"
+  },
+  meta: {
+    title: "Raghad Ports Customs Clearance",
+    description: "Your trusted partner in customs clearance and logistics services"
   }
 };

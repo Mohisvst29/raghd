@@ -34,7 +34,7 @@ export default function HeroSlider({ slides }: { slides: Slide[] }) {
           className="absolute inset-0 z-0"
         >
           <img 
-            alt="Hero Background" 
+            alt={slides[currentSlide].title || 'Hero'} 
             className="w-full h-full object-cover" 
             src={slides[currentSlide].image}
           />
@@ -63,7 +63,7 @@ export default function HeroSlider({ slides }: { slides: Slide[] }) {
                   whileTap={{ scale: 0.95 }}
                   className="bg-primary text-white px-8 py-4 rounded-xl font-bold hover:bg-primary/90 transition-colors duration-300 shadow-xl border border-white/20"
                 >
-                  {slides[currentSlide].buttonText || slides[currentSlide].cta || "تواصل معنا"}
+                  {slides[currentSlide].buttonText || slides[currentSlide].cta}
                 </motion.button>
               </a>
             </div>

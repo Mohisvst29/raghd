@@ -27,7 +27,7 @@ export default function Footer() {
             <div className="space-y-4 max-w-sm">
                 <Link href="/">
                     <img 
-                        alt="Raghadports Logo" 
+                        alt={t.common.logoAlt} 
                         className="w-auto object-contain mb-4 transition-all" 
                         style={{ height: `${Math.max(40, logoSize - 16)}px`, maxHeight: '80px' }}
                         src={logoUrl}

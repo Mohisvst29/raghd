@@ -19,7 +19,7 @@ export default function ServicesContent({ siteContent }: { siteContent: any }) {
         <section className="relative h-64 md:h-80 flex items-center justify-center overflow-hidden">
           <img
             src={currentContent?.services?.heroImage || "https://images.unsplash.com/photo-1578575437130-527eed3abbec?q=80&w=2070&auto=format&fit=crop"}
-            alt="Services Hero"
+            alt={p.heroTitle}
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-l from-primary/80 to-primary/50" />
@@ -67,7 +67,7 @@ export default function ServicesContent({ siteContent }: { siteContent: any }) {
                     
                     <div className="p-8 flex-1 flex flex-col">
                       <div className="mb-6 flex-1">
-                        <h4 className="text-sm font-bold text-secondary uppercase tracking-widest mb-4">الخدمات المشمولة</h4>
+                        <h4 className="text-sm font-bold text-secondary uppercase tracking-widest mb-4">{t.common.includedServices}</h4>
                         <div className="flex flex-wrap gap-2">
                           {(service.sub_services?.length > 0 ? service.sub_services : service.features?.split(","))?.map((item: string, i: number) => item.trim() && (
                             <span key={i} className="inline-flex items-center bg-surface-container text-on-surface-variant text-sm px-3 py-1.5 rounded-full border border-outline-variant">
@@ -80,11 +80,11 @@ export default function ServicesContent({ siteContent }: { siteContent: any }) {
 
                       {service.logos && service.logos.length > 0 && (
                         <div className="mb-8 pt-6 border-t border-outline-variant">
-                          <h4 className="text-xs font-bold text-on-surface-variant mb-4">الجهات المرتبطة</h4>
+                          <h4 className="text-xs font-bold text-on-surface-variant mb-4">{t.common.associatedEntities}</h4>
                           <div className="flex gap-4 flex-wrap items-center">
                             {service.logos.map((logo: string, lIdx: number) => (
                               <div key={lIdx} className="bg-surface-container-lowest p-2 rounded-xl border border-outline-variant hover:border-primary/30 hover:shadow-sm transition-all">
-                                <img src={logo} alt="Partner Logo" className="h-10 w-auto object-contain mix-blend-multiply" />
+                                <img src={logo} alt={t.common.partnerLogoAlt} className="h-10 w-auto object-contain mix-blend-multiply" />
                               </div>
                             ))}
                           </div>
@@ -93,7 +93,7 @@ export default function ServicesContent({ siteContent }: { siteContent: any }) {
 
                       <div className="mt-auto">
                         <a href={service.button_link || "/contact"} className="flex items-center justify-center gap-2 w-full bg-surface-container text-primary font-bold py-4 rounded-xl border border-outline-variant hover:bg-primary hover:text-white transition-all duration-300 group/btn">
-                          {service.button_text || "اطلب الخدمة الآن"}
+                          {service.button_text || t.common.orderServiceNow}
                           <span className="material-symbols-outlined text-[20px] transform group-hover/btn:-translate-x-1 transition-transform">arrow_back</span>
                         </a>
                       </div>
@@ -101,7 +101,7 @@ export default function ServicesContent({ siteContent }: { siteContent: any }) {
                   </motion.div>
                 ))
               ) : (
-                <div className="col-span-full text-center text-on-surface-variant py-20">لا توجد خدمات مضافة حالياً.</div>
+                <div className="col-span-full text-center text-on-surface-variant py-20">{t.common.noServicesYet}</div>
               )}
             </div>
           </div>
@@ -111,16 +111,16 @@ export default function ServicesContent({ siteContent }: { siteContent: any }) {
         {siteContent?.accreditedEntities && siteContent.accreditedEntities.logos && siteContent.accreditedEntities.logos.length > 0 && (
           <section className="py-12 bg-white border-y border-outline-variant overflow-hidden">
             <div className="max-w-[1280px] mx-auto px-margin mb-8 text-center">
-              <h3 className="text-xl font-bold text-on-surface-variant uppercase tracking-widest">{siteContent.accreditedEntities.title || "الجهات المعتمدة"}</h3>
+              <h3 className="text-xl font-bold text-on-surface-variant uppercase tracking-widest">{siteContent.accreditedEntities.title || t.common.accreditedEntities}</h3>
             </div>
             <div className="relative w-full flex overflow-x-hidden">
               <div className="flex gap-16 items-center px-8 animate-marquee whitespace-nowrap">
                 {siteContent.accreditedEntities.logos.map((logo: string, idx: number) => (
-                  <img key={idx} src={logo} alt="Accredited Logo" className="h-16 md:h-20 w-auto object-contain grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300" />
+                  <img key={idx} src={logo} alt={t.common.accreditedLogoAlt} className="h-16 md:h-20 w-auto object-contain grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300" />
                 ))}
                 {/* Duplicate for infinite effect */}
                 {siteContent.accreditedEntities.logos.map((logo: string, idx: number) => (
-                  <img key={`dup-${idx}`} src={logo} alt="Accredited Logo" className="h-16 md:h-20 w-auto object-contain grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300" />
+                  <img key={`dup-${idx}`} src={logo} alt={t.common.accreditedLogoAlt} className="h-16 md:h-20 w-auto object-contain grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300" />
                 ))}
               </div>
             </div>

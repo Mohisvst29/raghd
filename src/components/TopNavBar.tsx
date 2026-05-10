@@ -22,7 +22,7 @@ export default function TopNavBar() {
         <div className="flex items-center gap-4">
           <Link href="/">
             <img 
-              alt="Raghadports Logo" 
+              alt={t.common.logoAlt} 
               className="w-auto object-contain transition-all" 
               style={{ height: `${logoSize}px`, maxHeight: '80px' }}
               src={logoUrl}

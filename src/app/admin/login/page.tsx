@@ -3,12 +3,14 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+  const { t, lang } = useLanguage();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,15 +24,15 @@ export default function AdminLogin() {
       if (data.success) {
         router.push("/admin");
       } else {
-        setError("اسم المستخدم أو كلمة المرور غير صحيحة");
+        setError(t.admin.login.errorCredentials);
       }
     } catch (err) {
-      setError("حدث خطأ في الاتصال بالسيرفر");
+      setError(t.admin.login.errorServer);
     }
   };
 
   return (
-    <div className="min-h-screen bg-surface flex items-center justify-center p-4 relative overflow-hidden" dir="rtl">
+    <div className="min-h-screen bg-surface flex items-center justify-center p-4 relative overflow-hidden">
       {/* Background decorations */}
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-tertiary/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3"></div>
@@ -46,8 +48,8 @@ export default function AdminLogin() {
               security
             </span>
           </div>
-          <h1 className="text-headline-md font-bold text-primary">تسجيل الدخول</h1>
-          <p className="text-body-sm text-on-surface-variant mt-2">مرحباً بك في لوحة تحكم مؤسسة رغد للموانئ</p>
+          <h1 className="text-headline-md font-bold text-primary">{t.admin.login.title}</h1>
+          <p className="text-body-sm text-on-surface-variant mt-2">{t.admin.login.subtitle}</p>
         </div>
 
         {error && (
@@ -59,7 +61,7 @@ export default function AdminLogin() {
 
         <form onSubmit={handleLogin} className="space-y-5">
           <div>
-            <label className="block text-label-sm font-bold text-on-surface mb-1">اسم المستخدم</label>
+            <label className="block text-label-sm font-bold text-on-surface mb-1">{t.admin.login.username}</label>
             <div className="relative">
               <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline">person</span>
               <input 
@@ -75,7 +77,7 @@ export default function AdminLogin() {
           
           <div>
             <div className="flex justify-between items-center mb-1">
-              <label className="block text-label-sm font-bold text-on-surface">كلمة المرور</label>
+              <label className="block text-label-sm font-bold text-on-surface">{t.admin.login.password}</label>
             </div>
             <div className="relative">
               <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline">lock</span>
@@ -97,7 +99,7 @@ export default function AdminLogin() {
               type="submit"
               className="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors shadow-md flex justify-center items-center gap-2"
             >
-              <span>دخول للوحة التحكم</span>
+              <span>{t.admin.login.submit}</span>
               <span className="material-symbols-outlined text-sm">login</span>
             </motion.button>
           </div>

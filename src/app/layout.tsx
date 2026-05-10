@@ -6,8 +6,8 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import PageTransition from "@/components/PageTransition";
 
 export const metadata: Metadata = {
-  title: "مؤسسة موانئ رغد للتخليص الجمركي",
-  description: "الشريك الموثوق في التخليص الجمركي والخدمات اللوجستية",
+  title: "مؤسسة موانئ رغد للتخليص الجمركي | Raghad Ports Customs Clearance",
+  description: "الشريك الموثوق في التخليص الجمركي والخدمات اللوجستية | Your trusted partner in customs clearance and logistics services",
 };
 
 import { connectDB } from "@/lib/mongoose";
@@ -34,7 +34,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
