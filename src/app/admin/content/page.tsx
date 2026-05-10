@@ -559,6 +559,33 @@ export default function AdminContent() {
                       <label className="text-xs font-bold text-on-surface">مفعل</label>
                     </div>
                   </div>
+                  {/* Image Upload for service */}
+                  <div className="mt-3 border-t border-outline-variant pt-3">
+                    <ImageUploader
+                      label="صورة الخدمة (اختياري)"
+                      currentUrl={item.image || ''}
+                      onUpload={(url) => {
+                        const newItems = [...content.services.items];
+                        newItems[idx].image = url;
+                        setContent({ ...content, services: { ...content.services, items: newItems } });
+                      }}
+                    />
+                    {item.image && (
+                      <div className="mt-2 flex items-center gap-3">
+                        <img src={item.image} className="h-20 w-32 object-cover rounded-lg border border-outline-variant" alt="Service" />
+                        <button
+                          onClick={() => {
+                            const newItems = [...content.services.items];
+                            newItems[idx].image = '';
+                            setContent({ ...content, services: { ...content.services, items: newItems } });
+                          }}
+                          className="text-error text-xs flex items-center gap-1"
+                        >
+                          <span className="material-symbols-outlined text-[16px]">delete</span> حذف الصورة
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
