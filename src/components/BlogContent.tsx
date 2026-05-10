@@ -7,8 +7,10 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function BlogContent({ siteContent, posts = [] }: { siteContent: any, posts?: any[] }) {
   const { t, lang } = useLanguage();
-  const currentContent = lang === 'ar' ? siteContent : (siteContent?.en || siteContent);
-  const dbBlog = currentContent?.blog ? { ...currentContent.blog, heroImage: siteContent?.blog?.heroImage } : { ...t.blogPage, heroImage: siteContent?.blog?.heroImage };
+  // When English: use translation files for text, CMS only for images
+  const dbBlog = lang === 'ar'
+    ? (siteContent?.blog ? { ...siteContent.blog } : { ...t.blogPage, heroImage: siteContent?.blog?.heroImage })
+    : { ...t.blogPage, heroImage: siteContent?.blog?.heroImage };
 
   const translatedPosts = posts.map(post => {
     if (lang === 'en' && post.en) {

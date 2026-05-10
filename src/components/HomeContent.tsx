@@ -41,21 +41,83 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
     }
   };
 
-  const currentContent = lang === 'ar' ? siteContent : (siteContent?.en || siteContent);
-  
-  const heroSlides = currentContent?.hero?.slides?.length > 0 
-    ? currentContent.hero.slides.map((slide: any, idx: number) => ({
-        ...slide,
-        title: slide.title || t.home.heroSlides[idx]?.title,
-        description: slide.description || t.home.heroSlides[idx]?.desc,
-        buttonText: slide.buttonText || t.home.heroSlides[idx]?.cta,
-      }))
-    : t.home.heroSlides;
+  // === KEY FIX: When English, use translation files as primary source, CMS only for images ===
+  const hasEnContent = !!siteContent?.en;
+  const enContent = siteContent?.en || {};
 
-  const about = currentContent?.about || t.home.about;
-  const services = currentContent?.services || t.home.services;
-  const whyUs = currentContent?.whyUs || t.home.whyUs;
-  const contact = currentContent?.contact || t.home.contact;
+  // Hero slides: English = translation text + CMS images; Arabic = CMS data
+  const heroSlides = lang === 'ar'
+    ? (siteContent?.hero?.slides?.length > 0
+        ? siteContent.hero.slides.map((slide: any, idx: number) => ({
+            ...slide,
+            title: slide.title || t.home.heroSlides[idx]?.title,
+            description: slide.description || t.home.heroSlides[idx]?.desc,
+            buttonText: slide.buttonText || t.home.heroSlides[idx]?.cta,
+          }))
+        : t.home.heroSlides)
+    : t.home.heroSlides.map((slide: any, idx: number) => ({
+        ...slide,
+        image: siteContent?.hero?.slides?.[idx]?.image || slide.image,
+        buttonLink: siteContent?.hero?.slides?.[idx]?.buttonLink || slide.buttonLink,
+      }));
+
+  // About: English = translation text + CMS image; Arabic = CMS or translation
+  const about = lang === 'ar'
+    ? (siteContent?.about || t.home.about)
+    : {
+        ...t.home.about,
+        image: siteContent?.about?.image || "",
+        title: enContent?.about?.title || t.home.about.heading,
+        heading: enContent?.about?.title || t.home.about.heading,
+        description: enContent?.about?.description || t.home.about.desc,
+        desc: enContent?.about?.description || t.home.about.desc,
+        visionTitle: t.home.about.visionTitle,
+        visionDesc: t.home.about.visionDesc,
+        missionTitle: t.home.about.missionTitle,
+        missionDesc: t.home.about.missionDesc,
+      };
+
+  // Services: English = translation text + CMS images/logos; Arabic = CMS or translation
+  const services = lang === 'ar'
+    ? (siteContent?.services || t.home.services)
+    : {
+        title: enContent?.services?.title || t.home.services.title,
+        subtitle: enContent?.services?.subtitle || t.home.services.subtitle,
+        items: siteContent?.services?.items?.map((item: any, idx: number) => ({
+          ...item, // keep images, logos, links
+          title: enContent?.services?.items?.[idx]?.title || t.home.services.items?.[idx]?.title || item.title,
+          short_description: enContent?.services?.items?.[idx]?.short_description || t.home.services.items?.[idx]?.short_description || item.short_description,
+          sub_services: enContent?.services?.items?.[idx]?.sub_services || t.home.services.items?.[idx]?.sub_services || item.sub_services,
+          button_text: enContent?.services?.items?.[idx]?.button_text || t.common.orderServiceNow,
+        })) || t.home.services.items || [],
+      };
+
+  // Why Us: English = translation text; Arabic = CMS or translation
+  const whyUs = lang === 'ar'
+    ? (siteContent?.whyUs || t.home.whyUs)
+    : {
+        title: t.home.whyUs.title,
+        features: [
+          { icon: "speed", title: t.home.whyUs.speed, description: t.home.whyUs.speedDesc },
+          { icon: "workspace_premium", title: t.home.whyUs.exp, description: t.home.whyUs.expDesc },
+          { icon: "payments", title: t.home.whyUs.price, description: t.home.whyUs.priceDesc },
+          { icon: "location_on", title: t.home.whyUs.location, description: t.home.whyUs.locationDesc },
+        ],
+      };
+
+  // Contact: English = translation text + CMS phone/email data; Arabic = CMS or translation
+  const contact = lang === 'ar'
+    ? (siteContent?.contact || t.home.contact)
+    : {
+        ...t.home.contact,
+        phones: siteContent?.contact?.phones || [],
+        emails: siteContent?.contact?.emails || [],
+        locations: siteContent?.contact?.locations || [],
+        socialMedia: siteContent?.contact?.socialMedia || {},
+        serviceOptions: null, // force use of translation
+        submitBtn: t.common.sendMessage,
+      };
+
   const accreditedEntities = siteContent?.accreditedEntities || null;
 
   return (
@@ -107,7 +169,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
               <img 
                 alt={t.common.aboutImageAlt} 
                 className="rounded-2xl shadow-2xl w-full h-[450px] object-cover" 
-                src={about.image || "https://lh3.googleusercontent.com/aida-public/AB6AXuCogNq19PXsuSh1TARASmOKuHGGlWYEPJi-ZlhXqP0SD3rkKdsL-eRm_ggr6yKri8pU4zSZ03ER-YyqK86ueXu6GS2qzAaLFq6MZd8tdWjGUGviA3UbmGUu_CGqtzaGl5WHRj8iTvsrhylAIuBOerilc9XPKCmvIbpTUjiG_d9_6UFRYowAPLN265xA-qqQiHx7z-Lg0vY-VatrMBUYHMEusn6jkUSUwKfvIbwEVgpUlsKgKKi7sQOjNSl-cmrwuPjZnOC6OUYDsHRg"}
+                src={about.image || siteContent?.about?.image || "https://lh3.googleusercontent.com/aida-public/AB6AXuCogNq19PXsuSh1TARASmOKuHGGlWYEPJi-ZlhXqP0SD3rkKdsL-eRm_ggr6yKri8pU4zSZ03ER-YyqK86ueXu6GS2qzAaLFq6MZd8tdWjGUGviA3UbmGUu_CGqtzaGl5WHRj8iTvsrhylAIuBOerilc9XPKCmvIbpTUjiG_d9_6UFRYowAPLN265xA-qqQiHx7z-Lg0vY-VatrMBUYHMEusn6jkUSUwKfvIbwEVgpUlsKgKKi7sQOjNSl-cmrwuPjZnOC6OUYDsHRg"}
               />
             </motion.div>
           </div>
@@ -196,14 +258,13 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
       {accreditedEntities && accreditedEntities.logos && accreditedEntities.logos.length > 0 && (
         <section className="py-12 bg-white border-y border-outline-variant overflow-hidden">
           <div className="max-w-[1280px] mx-auto px-margin mb-8 text-center">
-            <h3 className="text-xl font-bold text-on-surface-variant uppercase tracking-widest">{accreditedEntities.title || t.common.accreditedEntities}</h3>
+            <h3 className="text-xl font-bold text-on-surface-variant uppercase tracking-widest">{lang === 'ar' ? (accreditedEntities.title || t.common.accreditedEntities) : t.common.accreditedEntities}</h3>
           </div>
           <div className="relative w-full flex overflow-x-hidden">
             <div className="flex gap-16 items-center px-8 animate-marquee whitespace-nowrap">
               {accreditedEntities.logos.map((logo: string, idx: number) => (
                 <img key={idx} src={logo} alt={t.common.accreditedLogoAlt} className="h-16 md:h-20 w-auto object-contain grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300" />
               ))}
-              {/* Duplicate for infinite effect */}
               {accreditedEntities.logos.map((logo: string, idx: number) => (
                 <img key={`dup-${idx}`} src={logo} alt={t.common.accreditedLogoAlt} className="h-16 md:h-20 w-auto object-contain grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300" />
               ))}
@@ -234,7 +295,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                     <span className="material-symbols-outlined text-tertiary-fixed text-4xl">{feature.icon}</span>
                   </div>
                   <h4 className="font-headline-md">{feature.title}</h4>
-                  <p className="text-body-md text-secondary-fixed opacity-80 whitespace-pre-line">{feature.description}</p>
+                  <p className="text-body-md text-secondary-fixed opacity-80 whitespace-pre-line">{feature.description || feature.desc}</p>
                 </motion.div>
               ))
             ) : (
@@ -276,7 +337,6 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                 <p className="text-body-md text-on-surface-variant mb-stack-md whitespace-pre-line">{contact.description || contact.desc}</p>
                 
                 <div className="space-y-6">
-
                   <div className="flex items-center gap-4">
                     <div className="bg-white p-3 rounded-full shadow-sm">
                       <span className="material-symbols-outlined text-primary">call</span>
@@ -327,18 +387,12 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                   <input value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full border-outline-variant rounded-lg focus:ring-primary focus:border-primary p-3 bg-surface" placeholder={t.home.contact.formPhonePlaceholder} type="tel" />
                 </div>
                 <div>
-                  <label className="block text-label-sm text-primary mb-1">{contact.serviceLabel || t.home.contact.formService}</label>
+                  <label className="block text-label-sm text-primary mb-1">{t.home.contact.formService}</label>
                   <select value={formData.service} onChange={e => setFormData({...formData, service: e.target.value})} className="w-full border-outline-variant rounded-lg focus:ring-primary focus:border-primary p-3 bg-surface">
                     <option value="">{t.home.contact.formService}</option>
-                    {contact.serviceOptions ? (
-                      contact.serviceOptions.split(",").map((opt: string, i: number) => (
-                        <option key={i} value={opt.trim()}>{opt.trim()}</option>
-                      ))
-                    ) : (
-                      t.home.contact.formServiceOptions.map((opt, i) => (
-                        <option key={i} value={opt}>{opt}</option>
-                      ))
-                    )}
+                    {t.home.contact.formServiceOptions.map((opt, i) => (
+                      <option key={i} value={opt}>{opt}</option>
+                    ))}
                   </select>
                 </div>
                 <div>
@@ -352,7 +406,7 @@ export default function HomeContent({ siteContent }: HomeContentProps) {
                   disabled={isSubmitting}
                   className="w-full bg-primary text-white py-4 rounded-lg font-bold hover:bg-primary-container transition-all shadow-md disabled:opacity-50"
                 >
-                  {isSubmitting ? t.common.submitting : (contact.submitBtn || contact.submit)}
+                  {isSubmitting ? t.common.submitting : t.common.sendMessage}
                 </motion.button>
               </form>
             </div>

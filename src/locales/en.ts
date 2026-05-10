@@ -87,7 +87,23 @@ export const en: typeof ar = {
       tracking: "Shipment Tracking",
       trackingItems: ["Continuous Updates", "Origin Tracking", "Monitoring Until Delivery"],
       extra: "Additional Services",
-      extraItems: ["Permits (Food, Saber)", "Logistics Warehousing", "Land Transportation"]
+      extraItems: ["Permits (Food, Saber)", "Logistics Warehousing", "Land Transportation"],
+      items: [
+        {
+          title: "Customs Clearance",
+          short_description: "Clearance procedures for all goods arriving to the Kingdom with full compliance with ZATCA regulations and customs standards",
+          sub_services: ["Import Clearance", "Export Clearance", "Transit Services"],
+          button_text: "Order Service Now",
+          features: "Import Clearance,Export Clearance,Transit Services"
+        },
+        {
+          title: "Consulting Services",
+          short_description: "HS Code determination - Pre-import consulting and tariff classification - Preventive document review before shipping",
+          sub_services: ["HS Code Determination", "Customs Duties Calculation", "Document Review"],
+          button_text: "Order Service Now",
+          features: "HS Code Determination,Customs Duties Calculation,Document Review"
+        }
+      ]
     },
     whyUs: {
       title: "Why Choose Us?",

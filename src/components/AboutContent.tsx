@@ -7,8 +7,25 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function AboutContent({ siteContent }: { siteContent: any }) {
   const { t, lang } = useLanguage();
-  const currentContent = lang === 'ar' ? siteContent : (siteContent?.en || siteContent);
-  const about = currentContent?.about ? { ...currentContent.about, heroImage: siteContent?.about?.heroImage } : { ...t.home.about, heroImage: siteContent?.about?.heroImage };
+  
+  // When English: use translation files for text, CMS only for images
+  const enContent = siteContent?.en || {};
+  const about = lang === 'ar'
+    ? (siteContent?.about ? { ...siteContent.about } : { ...t.home.about })
+    : {
+        ...t.home.about,
+        title: enContent?.about?.title || t.home.about.heading,
+        heading: enContent?.about?.title || t.home.about.heading,
+        description: enContent?.about?.description || t.home.about.desc,
+        desc: enContent?.about?.description || t.home.about.desc,
+        visionTitle: t.home.about.visionTitle,
+        visionDesc: t.home.about.visionDesc,
+        missionTitle: t.home.about.missionTitle,
+        missionDesc: t.home.about.missionDesc,
+        // Keep images from CMS
+        heroImage: siteContent?.about?.heroImage,
+        image: siteContent?.about?.image,
+      };
 
   return (
     <>
@@ -17,7 +34,7 @@ export default function AboutContent({ siteContent }: { siteContent: any }) {
         {/* Hero Section */}
         <section className="relative h-64 md:h-80 flex items-center justify-center overflow-hidden">
           <img
-            src={about.heroImage || "https://lh3.googleusercontent.com/aida-public/AB6AXuCogNq19PXsuSh1TARASmOKuHGGlWYEPJi-ZlhXqP0SD3rkKdsL-eRm_ggr6yKri8pU4zSZ03ER-YyqK86ueXu6GS2qzAaLFq6MZd8tdWjGUGviA3UbmGUu_CGqtzaGl5WHRj8iTvsrhylAIuBOerilc9XPKCmvIbpTUjiG_d9_6UFRYowAPLN265xA-qqQiHx7z-Lg0vY-VatrMBUYHMEusn6jkUSUwKfvIbwEVgpUlsKgKKi7sQOjNSl-cmrwuPjZnOC6OUYDsHRg"}
+            src={about.heroImage || siteContent?.about?.heroImage || "https://lh3.googleusercontent.com/aida-public/AB6AXuCogNq19PXsuSh1TARASmOKuHGGlWYEPJi-ZlhXqP0SD3rkKdsL-eRm_ggr6yKri8pU4zSZ03ER-YyqK86ueXu6GS2qzAaLFq6MZd8tdWjGUGviA3UbmGUu_CGqtzaGl5WHRj8iTvsrhylAIuBOerilc9XPKCmvIbpTUjiG_d9_6UFRYowAPLN265xA-qqQiHx7z-Lg0vY-VatrMBUYHMEusn6jkUSUwKfvIbwEVgpUlsKgKKi7sQOjNSl-cmrwuPjZnOC6OUYDsHRg"}
             alt={t.common.aboutImageAlt}
             className="absolute inset-0 w-full h-full object-cover"
           />
@@ -42,7 +59,7 @@ export default function AboutContent({ siteContent }: { siteContent: any }) {
                 <img
                   alt={t.common.aboutImageAlt}
                   className="w-full h-[420px] object-cover"
-                  src={about.image || "https://lh3.googleusercontent.com/aida-public/AB6AXuCogNq19PXsuSh1TARASmOKuHGGlWYEPJi-ZlhXqP0SD3rkKdsL-eRm_ggr6yKri8pU4zSZ03ER-YyqK86ueXu6GS2qzAaLFq6MZd8tdWjGUGviA3UbmGUu_CGqtzaGl5WHRj8iTvsrhylAIuBOerilc9XPKCmvIbpTUjiG_d9_6UFRYowAPLN265xA-qqQiHx7z-Lg0vY-VatrMBUYHMEusn6jkUSUwKfvIbwEVgpUlsKgKKi7sQOjNSl-cmrwuPjZnOC6OUYDsHRg"}
+                  src={about.image || siteContent?.about?.image || "https://lh3.googleusercontent.com/aida-public/AB6AXuCogNq19PXsuSh1TARASmOKuHGGlWYEPJi-ZlhXqP0SD3rkKdsL-eRm_ggr6yKri8pU4zSZ03ER-YyqK86ueXu6GS2qzAaLFq6MZd8tdWjGUGviA3UbmGUu_CGqtzaGl5WHRj8iTvsrhylAIuBOerilc9XPKCmvIbpTUjiG_d9_6UFRYowAPLN265xA-qqQiHx7z-Lg0vY-VatrMBUYHMEusn6jkUSUwKfvIbwEVgpUlsKgKKi7sQOjNSl-cmrwuPjZnOC6OUYDsHRg"}
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-primary/80 to-transparent p-6">
                   <p className="text-white font-bold text-2xl">+15</p>

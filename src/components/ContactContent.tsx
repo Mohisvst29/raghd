@@ -37,13 +37,13 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
   };
 
   const baseP = t.contactPage;
-  const currentContent = lang === 'ar' ? siteContent : (siteContent?.en || siteContent);
-  const contact = currentContent?.contact ? { ...currentContent.contact, heroImage: siteContent?.contact?.heroImage } : { ...t.home.contact, heroImage: siteContent?.contact?.heroImage };
+  
+  // When English: use translation files for text, CMS only for images/contact data
   const p = {
     ...baseP,
-    formTitle: contact?.title || baseP.formTitle,
-    heroDesc: contact?.description || baseP.heroDesc,
-    formServiceOptions: contact?.serviceOptions ? contact.serviceOptions.split(",").map((s: string) => s.trim()) : baseP.formServiceOptions,
+    formTitle: lang === 'ar' ? (siteContent?.contact?.title || baseP.formTitle) : baseP.formTitle,
+    heroDesc: lang === 'ar' ? (siteContent?.contact?.description || baseP.heroDesc) : baseP.heroDesc,
+    formServiceOptions: baseP.formServiceOptions,
   };
 
   return (
@@ -53,7 +53,7 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
         {/* Hero Section - Dark */}
         <section className="relative h-64 md:h-72 flex items-center justify-center overflow-hidden">
           <img
-            src={contact?.heroImage || "https://images.unsplash.com/photo-1586528116311-ad8ed7c83a7f?q=80&w=2070&auto=format&fit=crop"}
+            src={siteContent?.contact?.heroImage || "https://images.unsplash.com/photo-1586528116311-ad8ed7c83a7f?q=80&w=2070&auto=format&fit=crop"}
             alt={p.heroTitle}
             className="absolute inset-0 w-full h-full object-cover"
           />
@@ -75,7 +75,7 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                 </div>
                 <div className="text-right">
                   <p className="text-xs font-bold text-secondary uppercase tracking-wider">{p.infoPhones}</p>
-                  {((contact?.phones && Array.isArray(contact.phones) && contact.phones.filter(Boolean).length > 0) ? contact.phones.filter(Boolean) : ["0506468204", "0568094648"]).map((phone: string, i: number) => (
+                  {((siteContent?.contact?.phones && Array.isArray(siteContent.contact.phones) && siteContent.contact.phones.filter(Boolean).length > 0) ? siteContent.contact.phones.filter(Boolean) : ["0506468204", "0568094648"]).map((phone: string, i: number) => (
                     <p key={i} className="text-primary font-bold mt-1" dir="ltr">{phone}</p>
                   ))}
                 </div>
@@ -88,7 +88,7 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                 </div>
                 <div className="text-right">
                   <p className="text-xs font-bold text-secondary uppercase tracking-wider">{p.infoEmail}</p>
-                  {((contact?.emails && Array.isArray(contact.emails) && contact.emails.filter(Boolean).length > 0) ? contact.emails.filter(Boolean) : ["ceo@raghadports.com"]).map((email: string, i: number) => (
+                  {((siteContent?.contact?.emails && Array.isArray(siteContent.contact.emails) && siteContent.contact.emails.filter(Boolean).length > 0) ? siteContent.contact.emails.filter(Boolean) : ["ceo@raghadports.com"]).map((email: string, i: number) => (
                     <p key={i} className="text-primary font-bold mt-1">{email}</p>
                   ))}
                 </div>
@@ -101,9 +101,7 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                 </div>
                 <div className="text-right">
                   <p className="text-xs font-bold text-secondary uppercase tracking-wider">{p.infoLocation}</p>
-                  {((contact?.locations && Array.isArray(contact.locations) && contact.locations.filter(Boolean).length > 0) ? contact.locations.filter(Boolean) : [t.contactPage.infoLocationDefault]).map((loc: string, i: number) => (
-                    <p key={i} className="text-primary font-bold mt-1">{loc}</p>
-                  ))}
+                  <p className="text-primary font-bold mt-1">{t.contactPage.infoLocationDefault}</p>
                 </div>
               </div>
             </div>
@@ -163,7 +161,7 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-primary mb-1">{contact?.serviceLabel || t.home.contact.formService}</label>
+                    <label className="block text-xs font-bold text-primary mb-1">{t.home.contact.formService}</label>
                     <select 
                       value={formData.service}
                       onChange={(e) => setFormData({ ...formData, service: e.target.value })}
@@ -194,7 +192,7 @@ export default function ContactContent({ siteContent }: { siteContent: any }) {
                     disabled={isSubmitting}
                     className="w-full bg-primary text-white py-4 rounded-lg font-bold text-lg hover:shadow-lg transition-all disabled:opacity-50"
                   >
-                    {isSubmitting ? t.common.submitting : (contact?.submitBtn || t.common.sendMessage)}
+                    {isSubmitting ? t.common.submitting : t.common.sendMessage}
                   </motion.button>
                 </form>
               </div>

@@ -8,7 +8,8 @@ import Link from "next/link";
 
 export default function WhyUsContent({ siteContent }: { siteContent: any }) {
   const { t, lang } = useLanguage();
-  const currentContent = lang === 'ar' ? siteContent : (siteContent?.en || siteContent);
+  // WhyUsContent uses translation keys (t.whyUsPage) for all text
+  // CMS only used for hero image
   const p = t.whyUsPage;
 
   return (
@@ -18,7 +19,7 @@ export default function WhyUsContent({ siteContent }: { siteContent: any }) {
         {/* Hero Section */}
         <section className="relative h-64 md:h-80 flex items-center justify-center overflow-hidden bg-primary-container">
           <img
-            src={currentContent?.whyUs?.heroImage || "https://images.unsplash.com/photo-1586528116311-ad8ed7c83a7f?q=80&w=2070&auto=format&fit=crop"}
+            src={siteContent?.whyUs?.heroImage || "https://images.unsplash.com/photo-1586528116311-ad8ed7c83a7f?q=80&w=2070&auto=format&fit=crop"}
             alt="Why Us Hero"
             className="absolute inset-0 w-full h-full object-cover"
           />

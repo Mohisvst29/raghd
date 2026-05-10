@@ -8,8 +8,25 @@ import Link from "next/link";
 
 export default function ServicesContent({ siteContent }: { siteContent: any }) {
   const { t, lang } = useLanguage();
-  const currentContent = lang === 'ar' ? siteContent : (siteContent?.en || siteContent);
+  const enContent = siteContent?.en || {};
   const p = t.servicesPage;
+
+  // When English: use translation for text, CMS only for images/logos
+  const services = lang === 'ar'
+    ? (siteContent?.services || { title: p.heroTitle, subtitle: p.heroDesc, items: [] })
+    : {
+        title: enContent?.services?.title || p.heroTitle,
+        subtitle: enContent?.services?.subtitle || p.heroDesc,
+        heroImage: siteContent?.services?.heroImage,
+        items: siteContent?.services?.items?.map((item: any, idx: number) => ({
+          ...item, // keep images, logos, links, order, status
+          title: enContent?.services?.items?.[idx]?.title || t.home.services.items?.[idx]?.title || item.title,
+          short_description: enContent?.services?.items?.[idx]?.short_description || t.home.services.items?.[idx]?.short_description || item.short_description,
+          sub_services: enContent?.services?.items?.[idx]?.sub_services || t.home.services.items?.[idx]?.sub_services || item.sub_services,
+          features: enContent?.services?.items?.[idx]?.features || t.home.services.items?.[idx]?.features || item.features,
+          button_text: enContent?.services?.items?.[idx]?.button_text || t.common.orderServiceNow,
+        })) || [],
+      };
 
   return (
     <>
@@ -18,7 +35,7 @@ export default function ServicesContent({ siteContent }: { siteContent: any }) {
         {/* Hero Section */}
         <section className="relative h-64 md:h-80 flex items-center justify-center overflow-hidden">
           <img
-            src={currentContent?.services?.heroImage || "https://images.unsplash.com/photo-1578575437130-527eed3abbec?q=80&w=2070&auto=format&fit=crop"}
+            src={siteContent?.services?.heroImage || "https://images.unsplash.com/photo-1578575437130-527eed3abbec?q=80&w=2070&auto=format&fit=crop"}
             alt={p.heroTitle}
             className="absolute inset-0 w-full h-full object-cover"
           />
@@ -33,14 +50,14 @@ export default function ServicesContent({ siteContent }: { siteContent: any }) {
         <section className="py-20 bg-surface-container-low" id="services">
           <div className="max-w-[1280px] mx-auto px-margin">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">{currentContent?.services?.title || p.heroTitle}</h2>
-              <p className="text-lg text-on-surface-variant max-w-2xl mx-auto">{currentContent?.services?.subtitle || p.heroDesc}</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">{services.title}</h2>
+              <p className="text-lg text-on-surface-variant max-w-2xl mx-auto">{services.subtitle}</p>
               <div className="w-20 h-1 bg-tertiary-container mx-auto mt-6 rounded-full"></div>
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {currentContent?.services?.items && currentContent.services.items.length > 0 ? (
-                currentContent.services.items
+              {services.items && services.items.length > 0 ? (
+                services.items
                   .filter((s: any) => s.status !== false)
                   .sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
                   .map((service: any, idx: number) => (
@@ -111,14 +128,13 @@ export default function ServicesContent({ siteContent }: { siteContent: any }) {
         {siteContent?.accreditedEntities && siteContent.accreditedEntities.logos && siteContent.accreditedEntities.logos.length > 0 && (
           <section className="py-12 bg-white border-y border-outline-variant overflow-hidden">
             <div className="max-w-[1280px] mx-auto px-margin mb-8 text-center">
-              <h3 className="text-xl font-bold text-on-surface-variant uppercase tracking-widest">{siteContent.accreditedEntities.title || t.common.accreditedEntities}</h3>
+              <h3 className="text-xl font-bold text-on-surface-variant uppercase tracking-widest">{t.common.accreditedEntities}</h3>
             </div>
             <div className="relative w-full flex overflow-x-hidden">
               <div className="flex gap-16 items-center px-8 animate-marquee whitespace-nowrap">
                 {siteContent.accreditedEntities.logos.map((logo: string, idx: number) => (
                   <img key={idx} src={logo} alt={t.common.accreditedLogoAlt} className="h-16 md:h-20 w-auto object-contain grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300" />
                 ))}
-                {/* Duplicate for infinite effect */}
                 {siteContent.accreditedEntities.logos.map((logo: string, idx: number) => (
                   <img key={`dup-${idx}`} src={logo} alt={t.common.accreditedLogoAlt} className="h-16 md:h-20 w-auto object-contain grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300" />
                 ))}
