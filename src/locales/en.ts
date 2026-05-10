@@ -102,6 +102,13 @@ export const en: typeof ar = {
           sub_services: ["HS Code Determination", "Customs Duties Calculation", "Document Review"],
           button_text: "Order Service Now",
           features: "HS Code Determination,Customs Duties Calculation,Document Review"
+        },
+        {
+          title: "Shipment Tracking",
+          short_description: "Track your shipment from source to delivery with continuous client updates and resolution of any shipment issues",
+          sub_services: ["Continuous Client Updates", "Source-to-Delivery Tracking", "Shipment Issue Resolution"],
+          button_text: "Order Service Now",
+          features: "Continuous Client Updates,Source-to-Delivery Tracking,Shipment Issue Resolution"
         }
       ]
     },
