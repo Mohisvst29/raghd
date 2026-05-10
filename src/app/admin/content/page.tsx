@@ -153,31 +153,64 @@ export default function AdminContent() {
                   </div>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-bold text-on-surface mb-1">العنوان الرئيسي (عربي)</label>
-                        <input 
-                          type="text" 
-                          value={slide.title}
-                          onChange={(e) => {
-                            const newSlides = [...content.hero.slides];
-                            newSlides[index].title = e.target.value;
-                            setContent({ ...content, hero: { ...content.hero, slides: newSlides } });
-                          }}
-                          className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none" 
-                        />
+                      {/* Arabic Inputs */}
+                      <div className="bg-surface-container p-3 rounded-lg border border-outline-variant">
+                        <label className="block text-sm font-bold text-on-surface mb-1 text-primary">عربي</label>
+                        <div className="space-y-2">
+                          <input 
+                            type="text" 
+                            placeholder="العنوان الرئيسي"
+                            value={slide.title}
+                            onChange={(e) => {
+                              const newSlides = [...content.hero.slides];
+                              newSlides[index].title = e.target.value;
+                              setContent({ ...content, hero: { ...content.hero, slides: newSlides } });
+                            }}
+                            className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none" 
+                          />
+                          <textarea 
+                            placeholder="الوصف"
+                            value={slide.description}
+                            onChange={(e) => {
+                              const newSlides = [...content.hero.slides];
+                              newSlides[index].description = e.target.value;
+                              setContent({ ...content, hero: { ...content.hero, slides: newSlides } });
+                            }}
+                            className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none" 
+                            rows={2} 
+                          />
+                        </div>
                       </div>
-                      <div>
-                        <label className="block text-sm font-bold text-on-surface mb-1">الوصف</label>
-                        <textarea 
-                          value={slide.description}
-                          onChange={(e) => {
-                            const newSlides = [...content.hero.slides];
-                            newSlides[index].description = e.target.value;
-                            setContent({ ...content, hero: { ...content.hero, slides: newSlides } });
-                          }}
-                          className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none" 
-                          rows={3} 
-                        />
+
+                      {/* English Inputs */}
+                      <div className="bg-surface-container p-3 rounded-lg border border-outline-variant">
+                        <label className="block text-sm font-bold text-on-surface mb-1 text-primary">English</label>
+                        <div className="space-y-2">
+                          <input 
+                            type="text" 
+                            placeholder="Title"
+                            value={content.en?.hero?.slides?.[index]?.title || ""}
+                            onChange={(e) => {
+                              const enHero = content.en?.hero || {};
+                              const enSlides = enHero.slides ? [...enHero.slides] : content.hero.slides.map(() => ({}));
+                              enSlides[index] = { ...enSlides[index], title: e.target.value };
+                              setContent({ ...content, en: { ...content.en, hero: { ...enHero, slides: enSlides } } });
+                            }}
+                            className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none text-left" dir="ltr"
+                          />
+                          <textarea 
+                            placeholder="Description"
+                            value={content.en?.hero?.slides?.[index]?.description || ""}
+                            onChange={(e) => {
+                              const enHero = content.en?.hero || {};
+                              const enSlides = enHero.slides ? [...enHero.slides] : content.hero.slides.map(() => ({}));
+                              enSlides[index] = { ...enSlides[index], description: e.target.value };
+                              setContent({ ...content, en: { ...content.en, hero: { ...enHero, slides: enSlides } } });
+                            }}
+                            className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none text-left" dir="ltr"
+                            rows={2} 
+                          />
+                        </div>
                       </div>
                     </div>
                     <div>
@@ -327,44 +360,80 @@ export default function AdminContent() {
                   </button>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <label className="block text-xs font-bold text-on-surface mb-1">اسم الخدمة</label>
-                      <input 
-                        type="text" 
-                        value={item.title || ""} 
-                        onChange={(e) => {
-                          const newItems = [...content.services.items];
-                          newItems[idx].title = e.target.value;
-                          setContent({ ...content, services: { ...content.services, items: newItems } });
-                        }}
-                        className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none" 
-                      />
+                    {/* Arabic Text */}
+                    <div className="bg-surface-container p-3 rounded-lg border border-outline-variant space-y-3">
+                      <label className="block text-sm font-bold text-on-surface mb-1 text-primary">عربي</label>
+                      <div>
+                        <label className="block text-xs font-bold text-on-surface mb-1">اسم الخدمة</label>
+                        <input 
+                          type="text" 
+                          value={item.title || ""} 
+                          onChange={(e) => {
+                            const newItems = [...content.services.items];
+                            newItems[idx].title = e.target.value;
+                            setContent({ ...content, services: { ...content.services, items: newItems } });
+                          }}
+                          className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none" 
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-on-surface mb-1">وصف مختصر</label>
+                        <textarea 
+                          value={item.short_description || ""} 
+                          onChange={(e) => {
+                            const newItems = [...content.services.items];
+                            newItems[idx].short_description = e.target.value;
+                            setContent({ ...content, services: { ...content.services, items: newItems } });
+                          }}
+                          className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none h-20" 
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-on-surface mb-1">الرابط المخصص (Slug)</label>
-                      <input 
-                        type="text" 
-                        value={item.slug || ""} 
-                        onChange={(e) => {
-                          const newItems = [...content.services.items];
-                          newItems[idx].slug = e.target.value;
-                          setContent({ ...content, services: { ...content.services, items: newItems } });
-                        }}
-                        className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none text-left" dir="ltr"
-                      />
+
+                    {/* English Text */}
+                    <div className="bg-surface-container p-3 rounded-lg border border-outline-variant space-y-3">
+                      <label className="block text-sm font-bold text-on-surface mb-1 text-primary">English</label>
+                      <div>
+                        <label className="block text-xs font-bold text-on-surface mb-1">Service Name</label>
+                        <input 
+                          type="text" 
+                          value={content.en?.services?.items?.[idx]?.title || ""} 
+                          onChange={(e) => {
+                            const enServices = content.en?.services || {};
+                            const enItems = enServices.items ? [...enServices.items] : content.services.items.map(() => ({}));
+                            enItems[idx] = { ...enItems[idx], title: e.target.value };
+                            setContent({ ...content, en: { ...content.en, services: { ...enServices, items: enItems } } });
+                          }}
+                          className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none text-left" dir="ltr"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-on-surface mb-1">Short Description</label>
+                        <textarea 
+                          value={content.en?.services?.items?.[idx]?.short_description || ""} 
+                          onChange={(e) => {
+                            const enServices = content.en?.services || {};
+                            const enItems = enServices.items ? [...enServices.items] : content.services.items.map(() => ({}));
+                            enItems[idx] = { ...enItems[idx], short_description: e.target.value };
+                            setContent({ ...content, en: { ...content.en, services: { ...enServices, items: enItems } } });
+                          }}
+                          className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none h-20 text-left" dir="ltr"
+                        />
+                      </div>
                     </div>
                   </div>
 
                   <div className="mb-4">
-                    <label className="block text-xs font-bold text-on-surface mb-1">وصف مختصر</label>
-                    <textarea 
-                      value={item.short_description || ""} 
+                    <label className="block text-xs font-bold text-on-surface mb-1">الرابط المخصص (Slug)</label>
+                    <input 
+                      type="text" 
+                      value={item.slug || ""} 
                       onChange={(e) => {
                         const newItems = [...content.services.items];
-                        newItems[idx].short_description = e.target.value;
+                        newItems[idx].slug = e.target.value;
                         setContent({ ...content, services: { ...content.services, items: newItems } });
                       }}
-                      className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none h-20" 
+                      className="w-full md:w-1/2 bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none text-left" dir="ltr"
                     />
                   </div>
 
@@ -553,30 +622,68 @@ export default function AdminContent() {
                       className="w-16 bg-surface-container-low border border-outline-variant rounded px-2 py-1 text-center text-xs outline-none" dir="ltr" title="رمز الأيقونة" 
                     />
                   </div>
-                  <div>
-                    <label className="block text-xs text-on-surface mb-1">عنوان الميزة</label>
-                    <input 
-                      type="text" 
-                      value={feature.title} 
-                      onChange={(e) => {
-                        const newF = [...content.whyUs.features];
-                        newF[idx].title = e.target.value;
-                        setContent({ ...content, whyUs: { ...content.whyUs, features: newF } });
-                      }}
-                      className="w-full bg-surface-container-low border border-outline-variant rounded px-3 py-2 text-sm outline-none" 
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-on-surface mb-1">وصف الميزة</label>
-                    <textarea 
-                      value={feature.description} 
-                      onChange={(e) => {
-                        const newF = [...content.whyUs.features];
-                        newF[idx].description = e.target.value;
-                        setContent({ ...content, whyUs: { ...content.whyUs, features: newF } });
-                      }}
-                      className="w-full bg-surface-container-low border border-outline-variant rounded px-3 py-2 text-sm outline-none" rows={2} 
-                    />
+                  <div className="space-y-4">
+                    {/* Arabic Text */}
+                    <div className="bg-surface-container p-3 rounded-lg border border-outline-variant space-y-3">
+                      <label className="block text-sm font-bold text-on-surface mb-1 text-primary">عربي</label>
+                      <div>
+                        <label className="block text-xs text-on-surface mb-1">عنوان الميزة</label>
+                        <input 
+                          type="text" 
+                          value={feature.title} 
+                          onChange={(e) => {
+                            const newF = [...content.whyUs.features];
+                            newF[idx].title = e.target.value;
+                            setContent({ ...content, whyUs: { ...content.whyUs, features: newF } });
+                          }}
+                          className="w-full bg-surface-container-lowest border border-outline-variant rounded px-3 py-2 text-sm outline-none" 
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-on-surface mb-1">وصف الميزة</label>
+                        <textarea 
+                          value={feature.description} 
+                          onChange={(e) => {
+                            const newF = [...content.whyUs.features];
+                            newF[idx].description = e.target.value;
+                            setContent({ ...content, whyUs: { ...content.whyUs, features: newF } });
+                          }}
+                          className="w-full bg-surface-container-lowest border border-outline-variant rounded px-3 py-2 text-sm outline-none" rows={2} 
+                        />
+                      </div>
+                    </div>
+
+                    {/* English Text */}
+                    <div className="bg-surface-container p-3 rounded-lg border border-outline-variant space-y-3">
+                      <label className="block text-sm font-bold text-on-surface mb-1 text-primary">English</label>
+                      <div>
+                        <label className="block text-xs text-on-surface mb-1">Feature Title</label>
+                        <input 
+                          type="text" 
+                          value={content.en?.whyUs?.features?.[idx]?.title || ""} 
+                          onChange={(e) => {
+                            const enWhyUs = content.en?.whyUs || {};
+                            const enFeatures = enWhyUs.features ? [...enWhyUs.features] : content.whyUs.features.map(() => ({}));
+                            enFeatures[idx] = { ...enFeatures[idx], title: e.target.value };
+                            setContent({ ...content, en: { ...content.en, whyUs: { ...enWhyUs, features: enFeatures } } });
+                          }}
+                          className="w-full bg-surface-container-lowest border border-outline-variant rounded px-3 py-2 text-sm outline-none text-left" dir="ltr"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-on-surface mb-1">Feature Description</label>
+                        <textarea 
+                          value={content.en?.whyUs?.features?.[idx]?.description || ""} 
+                          onChange={(e) => {
+                            const enWhyUs = content.en?.whyUs || {};
+                            const enFeatures = enWhyUs.features ? [...enWhyUs.features] : content.whyUs.features.map(() => ({}));
+                            enFeatures[idx] = { ...enFeatures[idx], description: e.target.value };
+                            setContent({ ...content, en: { ...content.en, whyUs: { ...enWhyUs, features: enFeatures } } });
+                          }}
+                          className="w-full bg-surface-container-lowest border border-outline-variant rounded px-3 py-2 text-sm outline-none text-left" dir="ltr" rows={2} 
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
