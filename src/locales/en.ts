@@ -20,7 +20,9 @@ export const en: typeof ar = {
     externalLinks: "External Links",
     jeddahPort: "Jeddah Islamic Port",
     contactUs: "Contact Us",
-    copyright: "© 2024 Raghad Ports Customs Clearance. All rights reserved. Customs License No. 1234."
+    taxId: "Tax ID: 312042165900003",
+    licenseNumber: "License Number: 5233",
+    copyright: "© 2024 Raghad Ports Customs Clearance. All rights reserved."
   },
   common: {
     submitting: "Submitting...",

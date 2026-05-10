@@ -94,8 +94,13 @@ export default function Footer() {
             </div>
         </div>
         
-        <div className="max-w-[1280px] mx-auto px-margin border-t border-white/10 py-8 text-center md:text-right">
-            <p className="text-secondary-fixed-dim font-body-md text-body-md opacity-75">
+        <div className="max-w-[1280px] mx-auto px-margin border-t border-white/10 py-8 text-center md:text-right flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex flex-col md:flex-row gap-2 md:gap-6 text-secondary-fixed-dim font-body-sm md:font-body-md text-body-sm md:text-body-md opacity-90">
+                <span className="font-bold">{t.footer.taxId}</span>
+                <span className="hidden md:inline">•</span>
+                <span className="font-bold">{t.footer.licenseNumber}</span>
+            </div>
+            <p className="text-secondary-fixed-dim font-body-sm md:font-body-md text-body-sm md:text-body-md opacity-75">
                 {t.footer.copyright}
             </p>
         </div>
