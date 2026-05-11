@@ -37,15 +37,13 @@ export default function TopNavBar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Use DB services or fallback to translation items
-  const servicesList = dbServices.length > 0
-    ? dbServices
-    : [
-        { icon: "account_balance", title: t.home.services.clearance },
-        { icon: "analytics", title: t.home.services.consulting },
-        { icon: "distance", title: t.home.services.tracking },
-        { icon: "add_business", title: t.home.services.extra },
-      ];
+  // Use translation items for services dropdown to ensure language consistency
+  const servicesList = [
+    { icon: "account_balance", title: t.servicesPage.clearanceTitle },
+    { icon: "analytics", title: t.servicesPage.consultTitle },
+    { icon: "distance", title: t.servicesPage.trackTitle },
+    { icon: "add_business", title: t.servicesPage.extraTitle },
+  ];
 
   const navLinkClass = "text-secondary dark:text-secondary-fixed-dim font-body-md text-body-md hover:text-primary-container transition-colors duration-200";
   const activeNavClass = "text-primary dark:text-primary-fixed font-bold border-b-2 border-primary dark:border-primary-fixed pb-1 hover:text-primary-container transition-colors duration-200";
