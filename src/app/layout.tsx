@@ -6,8 +6,56 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import PageTransition from "@/components/PageTransition";
 
 export const metadata: Metadata = {
-  title: "مؤسسة موانئ رغد للتخليص الجمركي | Raghad Ports Customs Clearance",
+  metadataBase: new URL("https://www.raghadports.com"),
+  title: {
+    default: "مؤسسة موانئ رغد للتخليص الجمركي | Raghad Ports Customs Clearance",
+    template: "%s | مؤسسة موانئ رغد للتخليص الجمركي",
+  },
   description: "الشريك الموثوق في التخليص الجمركي والخدمات اللوجستية | Your trusted partner in customs clearance and logistics services",
+  keywords: ["تخليص جمركي", "جمارك", "لوجستيات", "شحن بري", "شحن بحري", "شحن جوي", "موانئ رغد", "السعودية", "استيراد وتصدير", "Customs Clearance", "Logistics", "Raghad Ports"],
+  authors: [{ name: "مؤسسة موانئ رغد" }],
+  creator: "مؤسسة موانئ رغد",
+  publisher: "مؤسسة موانئ رغد",
+  openGraph: {
+    type: "website",
+    locale: "ar_SA",
+    url: "https://www.raghadports.com",
+    title: "مؤسسة موانئ رغد للتخليص الجمركي | Raghad Ports Customs Clearance",
+    description: "الشريك الموثوق في التخليص الجمركي والخدمات اللوجستية | Your trusted partner in customs clearance and logistics services.",
+    siteName: "مؤسسة موانئ رغد للتخليص الجمركي",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "مؤسسة موانئ رغد للتخليص الجمركي",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "مؤسسة موانئ رغد للتخليص الجمركي",
+    description: "الشريك الموثوق في التخليص الجمركي والخدمات اللوجستية.",
+    images: ["/og-image.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: "https://www.raghadports.com",
+    languages: {
+      "ar": "https://www.raghadports.com",
+      "en": "https://www.raghadports.com/en",
+    },
+  },
 };
 
 import { connectDB } from "@/lib/mongoose";

@@ -8,7 +8,7 @@ export const en: typeof ar = {
     whyUs: "Why Us",
     blog: "Blog",
     contact: "Contact",
-    lang: "العربية",
+    lang: "English",
     admin: "Admin Panel"
   },
   footer: {

@@ -147,7 +147,7 @@ export default function TopNavBar() {
         <div className="flex items-center gap-4">
           <button onClick={toggleLanguage} className="flex items-center gap-2 text-primary dark:text-primary-fixed font-label-sm text-label-sm active:scale-95 transition-transform duration-150 hover:opacity-80">
             <span className="material-symbols-outlined">language</span>
-            <span>{t.nav.lang}</span>
+            <span>{lang === 'en' ? 'English' : 'العربية'}</span>
           </button>
           
           {/* Mobile Menu Toggle */}

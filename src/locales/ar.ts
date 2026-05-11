@@ -6,7 +6,7 @@ export const ar = {
     whyUs: "لماذا نحن",
     blog: "المدونة",
     contact: "اتصل بنا",
-    lang: "English",
+    lang: "العربية",
     admin: "لوحة التحكم"
   },
   footer: {
